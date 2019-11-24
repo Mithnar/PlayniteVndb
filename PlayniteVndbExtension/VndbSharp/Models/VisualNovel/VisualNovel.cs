@@ -26,7 +26,7 @@ namespace VndbSharp.Models.VisualNovel
 		[JsonProperty("image_nsfw")]
 		public Boolean IsImageNsfw { get; private set; }
 		public ReadOnlyCollection<TagMetadata> Tags { get; private set; }
-		public UInt32 Rating { get; private set; }
+		public double Rating { get; private set; }
 		[JsonProperty("screens")]
 		public ReadOnlyCollection<ScreenshotMetadata> Screenshots { get; private set; }
 	}

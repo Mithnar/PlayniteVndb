@@ -303,7 +303,7 @@ namespace playnite.metadata.vndb.provider
             if (!string.IsNullOrWhiteSpace(_vnData.VisualNovelLinks.Renai))
                 links.Add(new Link("Renai", "https://renai.us/game/" + _vnData.VisualNovelLinks.Renai));
             if (!string.IsNullOrWhiteSpace(_vnData.VisualNovelLinks.Wikidata))
-                links.Add(new Link("Renai", "https://www.wikidata.org/wiki/" + _vnData.VisualNovelLinks.Wikidata));
+                links.Add(new Link("Wikidata", "https://www.wikidata.org/wiki/" + _vnData.VisualNovelLinks.Wikidata));
             return links;
 
         }
