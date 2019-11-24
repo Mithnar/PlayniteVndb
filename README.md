@@ -11,7 +11,7 @@ Screenshots will follow
 
 ## Installation
 
-- Download the zipped extension: https://github.com/Mithnar/PlayniteVndb/releases/tag/1.0-RC1
+- Download the zipped extension: https://github.com/Mithnar/PlayniteVndb/releases
 - Unzip and drop the "Extensions" and "ExtensionsData" folders into your Playnite directory
 - Configure the extension to your needs (Settings../Metadata Sources/VNDB)
 - You can now use "Download Metadata" under "Edit Game Details" to use VNDB as a metadata source
