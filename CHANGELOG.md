@@ -7,7 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [1.0-RC2] - 2019-11.24
-https://github.com/Mithnar/PlayniteVndb/releases/tag/1.0-RC2
 ### Added
 - Changelog
 ### Fixed
@@ -15,7 +14,6 @@ https://github.com/Mithnar/PlayniteVndb/releases/tag/1.0-RC2
 - Community scores will now be calculated correctly
 
 ## [1.0-RC1] - 2019-11.24
-https://github.com/Mithnar/PlayniteVndb/releases/tag/1.0-RC1
 ### Added
 - Initial release
 

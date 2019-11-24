@@ -1,9 +1,11 @@
-# PlayniteVndbMetadataExtension
+# Playnite VNDB Metadata Extension
 > Enables VNDB as a Metadata source for Playnite
+
+Initial Release of the VNDB Playnite Extension.
 
 https://vndb.org/
 
-Initial Release of the VNDB Playnite Extension.
+VNDB is a comprehensive database for Visual Novels
 
 Screenshots will follow
 
@@ -15,9 +17,16 @@ Screenshots will follow
 - You can now use "Download Metadata" under "Edit Game Details" to use VNDB as a metadata source
 
 ## Release History
+For the detailed release history, head over to the [Changelog](https://github.com/Mithnar/PlayniteVndb/blob/master/CHANGELOG.md)
 
-* 1.0-RC1
-  - Initial Release Candidate
+###Recent Release:
+* [1.0-RC2](https://github.com/Mithnar/PlayniteVndb/releases/tag/1.0-RC2)
+##### Added
+- Changelog
+##### Fixed
+- Wikidata links will now be labeled as Wikidata
+- Community scores will now be calculated correctly
+
 
 ## Credits
 
@@ -34,7 +43,7 @@ For creatubg Playnite
 
 Mithnar – mithnar333+playnite@googlemail.com
 
-Distributed under the MIT license. See ``LICENSE`` for more information.
+Distributed under the MIT license. See [LICENSE](https://github.com/Mithnar/PlayniteVndb/blob/master/LICENSE) for more information.
 
 [https://github.com/Mithnar/PlayniteVndb](https://github.com/Mithnar/)
 
