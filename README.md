@@ -26,7 +26,6 @@ For the detailed release history, head over to the [Changelog](https://github.co
 - Cancelling background image selection no longer leads to cancelling the metadata download
 
 ## Credits
-
 https://github.com/KuroThing
 
 For hacking the VNDB Source into an older Playnite build without Metadata Extension support.
@@ -40,9 +39,6 @@ https://github.com/JosefNemec/Playnite
 For creating Playnite
 
 ## Meta
-
-Mithnar – mithnar333+playnite@googlemail.com
-
 Distributed under the MIT license. See [LICENSE](https://github.com/Mithnar/PlayniteVndb/blob/master/LICENSE) for more information.
 
 [https://github.com/Mithnar/PlayniteVndb](https://github.com/Mithnar/)

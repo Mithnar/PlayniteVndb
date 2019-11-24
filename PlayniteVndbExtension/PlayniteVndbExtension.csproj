@@ -114,6 +114,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DescriptionFormatter.cs" />
     <Compile Include="TagNames.cs" />
     <Compile Include="VndbMetadataPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

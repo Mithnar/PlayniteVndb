@@ -30,6 +30,8 @@ namespace playnite.metadata.vndb.provider
 
         private List<MetadataField> availableFields;
 
+        private DescriptionFormatter _descriptionFormatter;
+
 
         public VndbMetadataProvider(MetadataRequestOptions options, List<TagName> tagDetails, VndbMetadataPlugin plugin)
         {
@@ -38,6 +40,7 @@ namespace playnite.metadata.vndb.provider
             _plugin = plugin;
             _vndbClient = plugin.VndbClient;
             _settings = plugin.LoadPluginSettings<VndbMetadataSettings>();
+            _descriptionFormatter = new DescriptionFormatter();
         }
 
         public override List<MetadataField> AvailableFields
@@ -87,10 +90,10 @@ namespace playnite.metadata.vndb.provider
         {
             return _vnData.Tags.HasItems() && _vnData.Tags.Any(tag =>
             {
-                if (tagIsAvailableForScoreAndSpoiler(tag))
+                if (TagIsAvailableForScoreAndSpoiler(tag))
                     return _tagDetails.Any(tagDetails =>
                     {
-                        if (tag.Id.Equals(tagDetails.Id)) return tagIsInEnabledCategory(tagDetails);
+                        if (tag.Id.Equals(tagDetails.Id)) return TagIsInEnabledCategory(tagDetails);
 
                         return false;
                     });
@@ -99,9 +102,9 @@ namespace playnite.metadata.vndb.provider
             });
         }
 
-        private bool tagIsAvailableForScoreAndSpoiler(TagMetadata tag)
+        private bool TagIsAvailableForScoreAndSpoiler(TagMetadata tag)
         {
-            return tag.Score >= _settings.TagMinScore && lowerSpoilerLevel(tag);
+            return tag.Score >= _settings.TagMinScore && LowerSpoilerLevel(tag);
         }
 
         private bool GetVndbMetadata()
@@ -184,11 +187,11 @@ namespace playnite.metadata.vndb.provider
         {
             if (AvailableFields.Contains(MetadataField.Tags))
             {
-                var tags = _vnData.Tags.Select(mapTagToNamedTuple)
+                var tags = _vnData.Tags.Select(MapTagToNamedTuple)
                     .Where(tag =>
                     {
                         var (tagMetadata, tagDetails) = tag;
-                        if (tagIsAvailableForScoreAndSpoiler(tagMetadata)) return tagIsInEnabledCategory(tagDetails);
+                        if (TagIsAvailableForScoreAndSpoiler(tagMetadata)) return TagIsInEnabledCategory(tagDetails);
 
                         return false;
                     }).Select(tag =>
@@ -204,14 +207,14 @@ namespace playnite.metadata.vndb.provider
             return base.GetTags();
         }
 
-        private bool tagIsInEnabledCategory(TagName tagInfo)
+        private bool TagIsInEnabledCategory(TagName tagInfo)
         {
             return tagInfo.Cat.Equals("cont") && _settings.TagEnableContent ||
                    tagInfo.Cat.Equals("ero") && _settings.TagEnableSexual ||
                    tagInfo.Cat.Equals("tech") && _settings.TagEnableTechnical;
         }
 
-        private (TagMetadata, TagName) mapTagToNamedTuple(TagMetadata tag)
+        private (TagMetadata, TagName) MapTagToNamedTuple(TagMetadata tag)
         {
             var details = _tagDetails.Find(tagDetails =>
             {
@@ -222,7 +225,7 @@ namespace playnite.metadata.vndb.provider
             return (tag, details);
         }
 
-        private bool lowerSpoilerLevel(TagMetadata tag)
+        private bool LowerSpoilerLevel(TagMetadata tag)
         {
             switch (tag.SpoilerLevel)
             {
@@ -239,7 +242,10 @@ namespace playnite.metadata.vndb.provider
 
         public override string GetDescription()
         {
-            if (AvailableFields.Contains(MetadataField.Description)) return _vnData.Description;
+            if (AvailableFields.Contains(MetadataField.Description))
+            {
+                return _descriptionFormatter.Format(_vnData.Description);
+            } 
 
             return base.GetDescription();
         }

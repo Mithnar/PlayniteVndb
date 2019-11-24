@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - [Issue #2](https://github.com/Mithnar/PlayniteVndb/issues/2) Tags should not show as "UNKNOWN TAG" if they are filtered out by Category
+- [Issue #3](https://github.com/Mithnar/PlayniteVndb/issues/3) Line breaks should now be properly formatted
 - [Issue #4](https://github.com/Mithnar/PlayniteVndb/issues/4) Tags should not show as "UNKNOWN TAG" if they are filtered out by Score
 
 ## [1.0-RC3] - 2019-11.24
