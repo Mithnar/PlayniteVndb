@@ -19,6 +19,8 @@ namespace playnite.metadata.vndb
 
         private readonly List<TagName> _tagNames;
 
+        private readonly DescriptionFormatter _descriptionFormatter;
+
         public VndbMetadataPlugin(IPlayniteAPI playniteApi) : base(playniteApi)
         {
             var jsonString = File.ReadAllText
@@ -34,7 +36,7 @@ namespace playnite.metadata.vndb
                 .WithClientDetails("PlayniteVndbExtension", "0.1")
                 .WithFlagsCheck(true, HandleInvalidFlags)
                 .WithTimeout(10000);
-            
+            _descriptionFormatter = new DescriptionFormatter();
             CreateSettingsIfNotExists();
         }
 
@@ -76,7 +78,7 @@ namespace playnite.metadata.vndb
 
         public override OnDemandMetadataProvider GetMetadataProvider(MetadataRequestOptions options)
         {
-            return new VndbMetadataProvider(options, _tagNames, this);
+            return new VndbMetadataProvider(options, _tagNames, _descriptionFormatter, this);
         }
 
         public override ISettings GetSettings(bool firstRunSettings)

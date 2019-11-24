@@ -19,9 +19,8 @@ namespace playnite.metadata.vndb.provider
         private static readonly ILogger logger = LogManager.GetLogger();
 
         private readonly MetadataRequestOptions _options;
-        private readonly VndbMetadataPlugin _plugin;
         private readonly List<TagName> _tagDetails;
-
+        private readonly IPlayniteAPI _playniteApi;
         private readonly Vndb _vndbClient;
         private readonly VndbMetadataSettings _settings;
 
@@ -29,18 +28,16 @@ namespace playnite.metadata.vndb.provider
         private List<ProducerRelease> _vnProducers;
 
         private List<MetadataField> availableFields;
-
         private DescriptionFormatter _descriptionFormatter;
 
-
-        public VndbMetadataProvider(MetadataRequestOptions options, List<TagName> tagDetails, VndbMetadataPlugin plugin)
+        public VndbMetadataProvider(MetadataRequestOptions options, List<TagName> tagDetails, DescriptionFormatter descriptionFormatter, VndbMetadataPlugin plugin)
         {
             _options = options;
             _tagDetails = tagDetails;
-            _plugin = plugin;
+            _playniteApi = plugin.PlayniteApi;
             _vndbClient = plugin.VndbClient;
             _settings = plugin.LoadPluginSettings<VndbMetadataSettings>();
-            _descriptionFormatter = new DescriptionFormatter();
+            _descriptionFormatter = descriptionFormatter;
         }
 
         public override List<MetadataField> AvailableFields
@@ -112,7 +109,7 @@ namespace playnite.metadata.vndb.provider
             if (_vnData != null) return true;
 
             if (_options.IsBackgroundDownload) return false;
-            var item = _plugin.PlayniteApi.Dialogs.ChooseItemWithSearch(null, searchString =>
+            var item = _playniteApi.Dialogs.ChooseItemWithSearch(null, searchString =>
             {
                 var results = _vndbClient
                     .GetVisualNovelAsync(VndbFilters.Search.Fuzzy(searchString), VndbFlags.FullVisualNovel).Result
@@ -272,7 +269,7 @@ namespace playnite.metadata.vndb.provider
                 where !screenshot.IsNsfw || _settings.AllowNsfwImages
                 select new ImageFileOption(screenshot.Url)).ToList();
 
-            var background = _plugin.PlayniteApi.Dialogs.ChooseImageFile(selection, "Screenshots");
+            var background = _playniteApi.Dialogs.ChooseImageFile(selection, "Screenshots");
             if (background != null) return new MetadataFile(background.Path);
 
             return base.GetBackgroundImage();
