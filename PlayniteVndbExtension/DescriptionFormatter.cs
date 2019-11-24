@@ -15,7 +15,7 @@ namespace VndbSharp
         public string Format(string description)
         {
             var formatted = description.Replace("\n", "<br>" + Environment.NewLine);
-            formatted = _urlMatcher.Replace(formatted, "<a href=$1>$2</a>");
+            formatted = _urlMatcher.Replace(formatted, "<a href=\"$1\">$2</a>");
             return formatted;
         }
     }
