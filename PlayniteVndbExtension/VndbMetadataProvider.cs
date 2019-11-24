@@ -33,7 +33,6 @@ namespace playnite.metadata.vndb.provider
 
         public VndbMetadataProvider(MetadataRequestOptions options, List<TagName> tagNames, VndbMetadataPlugin plugin)
         {
-            logger.Debug("Constuct Provider");
             _options = options;
             _tagNames = tagNames;
             _plugin = plugin;
@@ -58,7 +57,6 @@ namespace playnite.metadata.vndb.provider
 
         private List<MetadataField> GetAvailableFields()
         {
-            logger.Debug("GetAvailableFields");
 
             if (_vnData == null)
             {
@@ -73,7 +71,7 @@ namespace playnite.metadata.vndb.provider
             {
                 fields.Add(MetadataField.Description);
             }
-
+            
             if (_vnData.Image != null && (!_vnData.IsImageNsfw || _settings.AllowNsfwImages))
             {
                 fields.Add(MetadataField.CoverImage);
@@ -282,6 +280,7 @@ namespace playnite.metadata.vndb.provider
             {
                 return new MetadataFile(_vnData.Image);
             }
+            
             return base.GetCoverImage();
         }
 
@@ -291,7 +290,12 @@ namespace playnite.metadata.vndb.provider
             var selection = (from screenshot in _vnData.Screenshots where !screenshot.IsNsfw || _settings.AllowNsfwImages select new ImageFileOption(screenshot.Url)).ToList();
 
             var background = _plugin.PlayniteApi.Dialogs.ChooseImageFile(selection, "Screenshots");
-            return new MetadataFile(background.Path);
+            if (background != null)
+            {
+                return new MetadataFile(background.Path);
+            }
+
+            return base.GetBackgroundImage();
         }
 
         public override List<Link> GetLinks()
@@ -304,8 +308,8 @@ namespace playnite.metadata.vndb.provider
                 links.Add(new Link("Renai", "https://renai.us/game/" + _vnData.VisualNovelLinks.Renai));
             if (!string.IsNullOrWhiteSpace(_vnData.VisualNovelLinks.Wikidata))
                 links.Add(new Link("Wikidata", "https://www.wikidata.org/wiki/" + _vnData.VisualNovelLinks.Wikidata));
+            
             return links;
-
         }
     }
 }

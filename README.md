@@ -19,25 +19,25 @@ Screenshots will follow
 ## Release History
 For the detailed release history, head over to the [Changelog](https://github.com/Mithnar/PlayniteVndb/blob/master/CHANGELOG.md)
 
-#### Recent Release
-* [1.0-RC2](https://github.com/Mithnar/PlayniteVndb/releases/tag/1.0-RC2)
-##### Added
-- Changelog
+### Recent Release:
+- [1.0-RC3](https://github.com/Mithnar/PlayniteVndb/releases/tag/1.0-RC3)
 ##### Fixed
-- Wikidata links will now be labeled as Wikidata
-- Community scores will now be calculated correctly
-
+- Fixed a bug that needed settings to be saved once, before using the plugin
+- Cancelling background image selection no longer leads to cancelling the metadata download
 
 ## Credits
 
 https://github.com/KuroThing
+
 For hacking the VNDB Source into an older Playnite build without Metadata Extension support.
 
 https://github.com/Nikey646/VndbSharp
+
 For making my life easier by writing a VNDB API client.
 
 https://github.com/JosefNemec/Playnite
-For creatubg Playnite
+
+For creating Playnite
 
 ## Meta
 

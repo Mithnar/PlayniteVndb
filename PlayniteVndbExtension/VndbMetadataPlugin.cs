@@ -34,6 +34,18 @@ namespace playnite.metadata.vndb
                 .WithClientDetails("PlayniteVndbExtension", "0.1")
                 .WithFlagsCheck(true, HandleInvalidFlags)
                 .WithTimeout(10000);
+            
+            CreateSettingsIfNotExists();
+        }
+
+        private void CreateSettingsIfNotExists()
+        {
+            var settings = LoadPluginSettings<VndbMetadataSettings>();
+            if (settings == null)
+            {
+                settings = new VndbMetadataSettings();
+                SavePluginSettings(settings);
+            }
         }
 
         public Vndb VndbClient { get; }
