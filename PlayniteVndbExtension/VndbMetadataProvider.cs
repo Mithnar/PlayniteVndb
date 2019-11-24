@@ -188,7 +188,15 @@ namespace playnite.metadata.vndb.provider
                     .Where(tag =>
                     {
                         var (tagMetadata, tagDetails) = tag;
-                        if (TagIsAvailableForScoreAndSpoiler(tagMetadata)) return TagIsInEnabledCategory(tagDetails);
+                        if (TagIsAvailableForScoreAndSpoiler(tagMetadata))
+                        {
+                            if (tagDetails != null)
+                            {
+                                return TagIsInEnabledCategory(tagDetails);
+                            }
+                            logger.Warn("VndbMetadataProvider: Could not find tag: " + tagMetadata.Id);
+                            return true;
+                        }
 
                         return false;
                     }).Select(tag =>
