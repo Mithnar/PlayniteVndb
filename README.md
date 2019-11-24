@@ -3,7 +3,7 @@
 
 https://vndb.org/
 
-Initial Release for my VNDB Playnite Extension.
+Initial Release of the VNDB Playnite Extension.
 
 Screenshots will follow
 
@@ -14,6 +14,11 @@ Screenshots will follow
 - Configure the extension to your needs (Settings../Metadata Sources/VNDB)
 - You can now use "Download Metadata" under "Edit Game Details" to use VNDB as a metadata source
 
+## Release History
+
+* 1.0-RC1
+  - Initial Release Candidate
+
 ## Credits
 
 https://github.com/KuroThing
@@ -22,10 +27,8 @@ For hacking the VNDB Source into an older Playnite build without Metadata Extens
 https://github.com/Nikey646/VndbSharp
 For making my life easier by writing a VNDB API client.
 
-## Release History
-
-* 1.0-RC1
-  - Initial Release Candidate
+https://github.com/JosefNemec/Playnite
+For creatubg Playnite
 
 ## Meta
 
