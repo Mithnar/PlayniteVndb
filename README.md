@@ -19,7 +19,7 @@ Screenshots will follow
 ## Release History
 For the detailed release history, head over to the [Changelog](https://github.com/Mithnar/PlayniteVndb/blob/master/CHANGELOG.md)
 
-###Recent Release:
+#### Recent Release
 * [1.0-RC2](https://github.com/Mithnar/PlayniteVndb/releases/tag/1.0-RC2)
 ##### Added
 - Changelog
@@ -53,4 +53,4 @@ Distributed under the MIT license. See [LICENSE](https://github.com/Mithnar/Play
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Reques
+5. Create a new Pull Request
