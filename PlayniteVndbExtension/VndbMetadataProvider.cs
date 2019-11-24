@@ -198,12 +198,18 @@ namespace playnite.metadata.vndb.provider
             {
                 return new ComparableList<String>(_vnProducers.Where(p => p.IsDeveloper).Select(p => p.Name).Distinct());
             }
+            
             return base.GetDevelopers();
         }
 
         public override List<string> GetPublishers()
         {
-            return new ComparableList<String>(_vnProducers.Where(p => p.IsPublisher).Select(p => p.Name).Distinct());
+            if (AvailableFields.Contains(MetadataField.Developers))
+            {
+                return new ComparableList<String>(_vnProducers.Where(p => p.IsPublisher).Select(p => p.Name).Distinct());
+            }
+            
+            return base.GetDevelopers();
         }
 
         public override List<string> GetTags()

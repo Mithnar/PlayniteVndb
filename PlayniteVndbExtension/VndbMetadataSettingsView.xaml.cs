@@ -1,6 +1,4 @@
-﻿using System.Windows.Controls;
-
-namespace PlayniteVndbExtension
+﻿namespace PlayniteVndbExtension
 {
     public partial class VndbMetadataSettingsView
     {
@@ -9,7 +7,7 @@ namespace PlayniteVndbExtension
             InitializeComponent();
         }
     }
-    
+
     public enum SpoilerLevel
     {
         None,

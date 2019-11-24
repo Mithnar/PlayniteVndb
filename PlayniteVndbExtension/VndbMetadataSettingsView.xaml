@@ -2,49 +2,49 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:pro="clr-namespace:PlayniteVndbExtension"
-             >
-    
+             xmlns:pro="clr-namespace:PlayniteVndbExtension">
+
     <UserControl.Resources>
         <ObjectDataProvider x:Key="GetDataFromEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="pro:SpoilerLevel"/>
+                <x:Type TypeName="pro:SpoilerLevel" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </UserControl.Resources>
-    
+
     <StackPanel>
         <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="Images:" />
         <StackPanel Orientation="Horizontal" Margin="10">
             <TextBlock Text="Allow NSFW: " />
             <CheckBox IsChecked="{Binding AllowNsfwImages}" />
         </StackPanel>
-        <Separator></Separator>
+        <Separator />
         <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="Tags:" />
         <StackPanel Orientation="Horizontal" Margin="5">
             <StackPanel Margin="5">
                 <TextBlock Text="Allow Content Tags" />
-                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding TagEnableContent}" /> 
+                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding TagEnableContent}" />
             </StackPanel>
             <StackPanel Margin="5">
                 <TextBlock Text="Allow Sexual Tags" />
-                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding TagEnableSexual}" /> 
+                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding TagEnableSexual}" />
             </StackPanel>
             <StackPanel Margin="5">
                 <TextBlock Text="Allow Technical Tags" />
-                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding TagEnableTechnical}" /> 
+                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding TagEnableTechnical}" />
             </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="5">
             <StackPanel Margin="5">
                 <TextBlock Text="Minimum Score" HorizontalAlignment="Center" />
-                <Slider Minimum="1" Maximum="3" TickFrequency="0.1" Value="{Binding TagMinScore}" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="1" MinWidth="100"/> 
+                <Slider Minimum="1" Maximum="3" TickFrequency="0.1" Value="{Binding TagMinScore}"
+                        AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="1" MinWidth="100" />
             </StackPanel>
             <StackPanel Margin="5">
                 <TextBlock Text="Spoiler Level" HorizontalAlignment="Center" />
-                <ComboBox SelectedValue="{Binding TagMaxSpoilerLevel}" MinWidth="100" ItemsSource="{Binding Source={StaticResource GetDataFromEnum}}" />
+                <ComboBox SelectedValue="{Binding TagMaxSpoilerLevel}" MinWidth="100"
+                          ItemsSource="{Binding Source={StaticResource GetDataFromEnum}}" />
             </StackPanel>
         </StackPanel>
     </StackPanel>
 </UserControl>
-
