@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using playnite.metadata.vndb;
 using playnite.metadata.vndb.settings;
 using Playnite.SDK;
 using Playnite.SDK.Metadata;
 using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
 using VndbSharp;
-using VndbSharp.Interfaces;
 using VndbSharp.Models;
 using VndbSharp.Models.Common;
 using VndbSharp.Models.Release;
@@ -214,28 +212,49 @@ namespace playnite.metadata.vndb.provider
         {
             if (AvailableFields.Contains(MetadataField.Tags))
             {
-                return _vnData.Tags.Select(tag =>
-                {
-                    var tag_name = _tagNames.Find(namedTag =>
+                var tags = _vnData.Tags.Select(mapTagToNamedTuple)
+                    .Where(tag =>
                     {
-                        if (namedTag.Id.Equals(tag.Id) && tag.Score > _settings.TagMinScore && lowerSpoilerLevel(tag))
+                        var (tagMetadata, tagInfo) = tag;
+                        if (tagMetadata.Score > _settings.TagMinScore && lowerSpoilerLevel(tagMetadata))
                         {
-                            return namedTag.Cat.Equals("cont") && _settings.TagEnableContent ||
-                                   namedTag.Cat.Equals("ero") && _settings.TagEnableSexual ||
-                                   namedTag.Cat.Equals("tech") && _settings.TagEnableTechnical;
+                            return tagInfo.Cat.Equals("cont") && _settings.TagEnableContent ||
+                                   tagInfo.Cat.Equals("ero") && _settings.TagEnableSexual ||
+                                   tagInfo.Cat.Equals("tech") && _settings.TagEnableTechnical;
                         }
 
                         return false;
-                    });
-                    if(tag_name != null)
+                    }).Select(tag =>
                     {
-                        return tag_name.Name;
-                    }
-                    return "UNKNOWN TAG";
-                }).DefaultIfEmpty().ToList();
+                        if (tag.Item2 != null)
+                        {
+                            return tag.Item2.Name;
+                        }
+
+                        return "UNKNOWN TAG";
+
+                    }).DefaultIfEmpty().ToList();
+                if (tags.HasNonEmptyItems())
+                {
+                    return tags;
+                }
             }
 
             return base.GetTags();
+        }
+
+        private (TagMetadata, TagName) mapTagToNamedTuple(TagMetadata tag)
+        {
+            var details = _tagNames.Find(tagDetails =>
+            {
+                if (tagDetails.Id.Equals(tag.Id))
+                {
+                    return true;
+                }
+
+                return false;
+            });
+            return (tag, details);
         }
 
         private bool lowerSpoilerLevel(TagMetadata tag)
