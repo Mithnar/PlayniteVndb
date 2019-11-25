@@ -158,7 +158,6 @@ namespace playnite.metadata.vndb.provider
 
         public override string GetName()
         {
-            logger.Debug("get: before name");
             if (AvailableFields.Contains(MetadataField.Name)) return _vnData.Name;
 
             return base.GetName();
@@ -166,7 +165,6 @@ namespace playnite.metadata.vndb.provider
 
         public override List<string> GetGenres()
         {
-            logger.Debug("get: before genre");
             if (!AvailableFields.Contains(MetadataField.Genres)) return base.GetGenres();
             var genres = new List<string>();
             genres.Add("Visual Novel");
@@ -175,7 +173,6 @@ namespace playnite.metadata.vndb.provider
 
         public override DateTime? GetReleaseDate()
         {
-            logger.Debug("get: before releasedate");
             if (AvailableFields.Contains(MetadataField.ReleaseDate))
                 if (_vnData.Released.Day != null && _vnData.Released.Month != null && _vnData.Released.Year != null)
                 {
@@ -194,7 +191,6 @@ namespace playnite.metadata.vndb.provider
 
         public override List<string> GetDevelopers()
         {
-            logger.Debug("get: before developers");
             if (AvailableFields.Contains(MetadataField.Developers))
                 return new ComparableList<string>(_vnProducers.Where(p => p.IsDeveloper).Select(p => p.Name)
                     .Distinct());
@@ -204,7 +200,6 @@ namespace playnite.metadata.vndb.provider
 
         public override List<string> GetPublishers()
         {
-            logger.Debug("get: before publishers");
             if (AvailableFields.Contains(MetadataField.Developers))
                 return new ComparableList<string>(_vnProducers.Where(p => p.IsPublisher).Select(p => p.Name)
                     .Distinct());
@@ -214,7 +209,6 @@ namespace playnite.metadata.vndb.provider
 
         public override List<string> GetTags()
         {
-            logger.Debug("get: before tags");
             if (AvailableFields.Contains(MetadataField.Tags))
             {
                 var tags = _vnData.Tags.Select(MapTagToNamedTuple)
@@ -228,17 +222,11 @@ namespace playnite.metadata.vndb.provider
                                 return TagIsInEnabledCategory(tagDetails);
                             }
                             logger.Warn("VndbMetadataProvider: Could not find tag: " + tagMetadata.Id);
-                            return true;
+                            return false;
                         }
 
                         return false;
-                    }).Select(tag =>
-                    {
-                        var (_, tagDetails) = tag;
-                        if (tagDetails != null) return tagDetails.Name;
-
-                        return "UNKNOWN TAG";
-                    }).DefaultIfEmpty().ToList();
+                    }).Select(tag => tag.Item2.Name).DefaultIfEmpty().ToList();
                 if (tags.HasNonEmptyItems()) return tags;
             }
 
@@ -280,7 +268,6 @@ namespace playnite.metadata.vndb.provider
 
         public override string GetDescription()
         {
-            logger.Debug("get: before description");
             if (AvailableFields.Contains(MetadataField.Description))
             {
                 return _descriptionFormatter.Format(_vnData.Description);
@@ -291,7 +278,6 @@ namespace playnite.metadata.vndb.provider
 
         public override int? GetCommunityScore()
         {
-            logger.Debug("get: before score");
             if (AvailableFields.Contains(MetadataField.CommunityScore))
             {
                 return (int) (_vnData.Rating * 10.0);
@@ -302,7 +288,6 @@ namespace playnite.metadata.vndb.provider
 
         public override MetadataFile GetCoverImage()
         {
-            logger.Debug("get: before cover");
             if (!AvailableFields.Contains(MetadataField.CoverImage))
             {
                 if (!_vnData.IsImageNsfw || _settings.AllowNsfwImages)
@@ -317,7 +302,6 @@ namespace playnite.metadata.vndb.provider
 
         public override MetadataFile GetBackgroundImage()
         {
-            logger.Debug("get: before background");
             if (!AvailableFields.Contains(MetadataField.BackgroundImage)) return base.GetBackgroundImage();
             var selection = (from screenshot in _vnData.Screenshots
                 where !screenshot.IsNsfw || _settings.AllowNsfwImages
@@ -331,7 +315,6 @@ namespace playnite.metadata.vndb.provider
 
         public override List<Link> GetLinks()
         {
-            logger.Debug("get: before links");
             if (!AvailableFields.Contains(MetadataField.Links)) return base.GetLinks();
             var links = new List<Link> {new Link("VNDB", "https://vndb.org/v" + _vnData.Id)};
             if (!string.IsNullOrWhiteSpace(_vnData.VisualNovelLinks.Wikipedia))
