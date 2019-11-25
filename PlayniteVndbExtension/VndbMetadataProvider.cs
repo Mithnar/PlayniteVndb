@@ -1,36 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using playnite.metadata.vndb.settings;
 using Playnite.SDK;
 using Playnite.SDK.Metadata;
 using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
 using VndbSharp;
 using VndbSharp.Models;
-using VndbSharp.Models.Common;
 using VndbSharp.Models.Release;
 using VndbSharp.Models.VisualNovel;
 
-namespace playnite.metadata.vndb.provider
+namespace PlayniteVndbExtension
 {
     public class VndbMetadataProvider : OnDemandMetadataProvider
     {
-        private static readonly ILogger logger = LogManager.GetLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger();
+        private readonly DescriptionFormatter _descriptionFormatter;
 
         private readonly MetadataRequestOptions _options;
-        private readonly List<TagName> _tagDetails;
         private readonly IPlayniteAPI _playniteApi;
-        private readonly Vndb _vndbClient;
         private readonly VndbMetadataSettings _settings;
+        private readonly List<TagName> _tagDetails;
+        private readonly Vndb _vndbClient;
+
+        private List<MetadataField> _availableFields;
 
         private VisualNovel _vnData;
         private List<ProducerRelease> _vnProducers;
 
-        private List<MetadataField> availableFields;
-        private DescriptionFormatter _descriptionFormatter;
-
-        public VndbMetadataProvider(MetadataRequestOptions options, List<TagName> tagDetails, DescriptionFormatter descriptionFormatter, VndbMetadataPlugin plugin)
+        public VndbMetadataProvider(MetadataRequestOptions options, List<TagName> tagDetails,
+            DescriptionFormatter descriptionFormatter, VndbMetadataPlugin plugin)
         {
             _options = options;
             _tagDetails = tagDetails;
@@ -44,12 +43,9 @@ namespace playnite.metadata.vndb.provider
         {
             get
             {
-                if (availableFields == null)
-                {
-                    availableFields = GetAvailableFields();
-                }
+                if (_availableFields == null) _availableFields = GetAvailableFields();
 
-                return availableFields;
+                return _availableFields;
             }
         }
 
@@ -60,49 +56,33 @@ namespace playnite.metadata.vndb.provider
                     return new List<MetadataField>();
 
             var fields = new List<MetadataField> {MetadataField.Name};
-            
-            if (!string.IsNullOrEmpty(_vnData.Description))
-            {
-                fields.Add(MetadataField.Description);
-            }
+
+            if (!string.IsNullOrEmpty(_vnData.Description)) fields.Add(MetadataField.Description);
 
             if (_vnData.Image != null && (!_vnData.IsImageNsfw || _settings.AllowNsfwImages))
-            {
                 fields.Add(MetadataField.CoverImage);
-            }
 
             if (_vnData.Screenshots.HasItems() &&
                 _vnData.Screenshots.Any(image => !image.IsNsfw || _settings.AllowNsfwImages))
                 fields.Add(MetadataField.BackgroundImage);
 
-            if (_vnData.Released != null && _vnData.Released.Day != null && _vnData.Released.Month != null && _vnData.Released.Year != null)
-            {
+            if (_vnData.Released != null && _vnData.Released.Day != null && _vnData.Released.Month != null &&
+                _vnData.Released.Year != null)
                 fields.Add(MetadataField.ReleaseDate);
-            }
 
             fields.Add(MetadataField.Genres);
             fields.Add(MetadataField.Links);
 
-            if (HasViableTags())
-            {
-                fields.Add(MetadataField.Tags);
-            }
+            if (HasViableTags()) fields.Add(MetadataField.Tags);
 
-            if (_vnData.Rating != 0)
-            {
-                fields.Add(MetadataField.CommunityScore);
-            }
+            if (_vnData.Rating != 0) fields.Add(MetadataField.CommunityScore);
 
             if (_vnProducers != null && _vnProducers.Count(p => p.IsDeveloper) > 0)
-            {
                 fields.Add(MetadataField.Developers);
-            }
 
             if (_vnProducers != null && _vnProducers.Count(p => p.IsPublisher) > 0)
-            {
                 fields.Add(MetadataField.Publishers);
-            }
-            
+
             return fields;
         }
 
@@ -175,15 +155,13 @@ namespace playnite.metadata.vndb.provider
         {
             if (AvailableFields.Contains(MetadataField.ReleaseDate))
                 if (_vnData.Released.Day != null && _vnData.Released.Month != null && _vnData.Released.Year != null)
-                {
                     return new DateTime
                     (
                         (int) _vnData.Released.Year.Value,
                         _vnData.Released.Month.Value,
                         _vnData.Released.Day.Value
                     );
-                }
-                
+
 
             return base.GetReleaseDate();
         }
@@ -217,11 +195,9 @@ namespace playnite.metadata.vndb.provider
                         var (tagMetadata, tagDetails) = tag;
                         if (TagIsAvailableForScoreAndSpoiler(tagMetadata))
                         {
-                            if (tagDetails != null)
-                            {
-                                return TagIsInEnabledCategory(tagDetails);
-                            }
-                            logger.Warn("VndbMetadataProvider: Could not find tag: " + tagMetadata.Id);
+                            if (tagDetails != null) return TagIsInEnabledCategory(tagDetails);
+
+                            Logger.Warn("VndbMetadataProvider: Could not find tag: " + tagMetadata.Id);
                             return false;
                         }
 
@@ -255,11 +231,11 @@ namespace playnite.metadata.vndb.provider
         {
             switch (tag.SpoilerLevel)
             {
-                case SpoilerLevel.None:
+                case VndbSharp.Models.Common.SpoilerLevel.None:
                     return true;
-                case SpoilerLevel.Minor:
+                case VndbSharp.Models.Common.SpoilerLevel.Minor:
                     return !_settings.TagMaxSpoilerLevel.Equals(PlayniteVndbExtension.SpoilerLevel.None);
-                case SpoilerLevel.Major:
+                case VndbSharp.Models.Common.SpoilerLevel.Major:
                     return _settings.TagMaxSpoilerLevel.Equals(PlayniteVndbExtension.SpoilerLevel.Major);
                 default:
                     return false;
@@ -269,19 +245,14 @@ namespace playnite.metadata.vndb.provider
         public override string GetDescription()
         {
             if (AvailableFields.Contains(MetadataField.Description))
-            {
                 return _descriptionFormatter.Format(_vnData.Description);
-            } 
 
             return base.GetDescription();
         }
 
         public override int? GetCommunityScore()
         {
-            if (AvailableFields.Contains(MetadataField.CommunityScore))
-            {
-                return (int) (_vnData.Rating * 10.0);
-            }
+            if (AvailableFields.Contains(MetadataField.CommunityScore)) return (int) (_vnData.Rating * 10.0);
 
             return base.GetCommunityScore();
         }
@@ -289,13 +260,9 @@ namespace playnite.metadata.vndb.provider
         public override MetadataFile GetCoverImage()
         {
             if (!AvailableFields.Contains(MetadataField.CoverImage))
-            {
                 if (!_vnData.IsImageNsfw || _settings.AllowNsfwImages)
-                {
                     return new MetadataFile(_vnData.Image);
-                }
-            }
-           
+
 
             return base.GetCoverImage();
         }

@@ -1,4 +1,4 @@
-﻿namespace playnite.metadata.vndb
+﻿namespace PlayniteVndbExtension
 {
     public class TagName
     {

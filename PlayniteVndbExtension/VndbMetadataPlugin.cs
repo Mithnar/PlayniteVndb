@@ -3,23 +3,20 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Controls;
 using Newtonsoft.Json;
-using playnite.metadata.vndb.provider;
-using playnite.metadata.vndb.settings;
 using Playnite.SDK;
 using Playnite.SDK.Plugins;
-using PlayniteVndbExtension;
 using VndbSharp;
 using VndbSharp.Models;
 
-namespace playnite.metadata.vndb
+namespace PlayniteVndbExtension
 {
     public class VndbMetadataPlugin : MetadataPlugin
     {
         private const string Guid = "1da026f7-442d-4d13-a547-13c02a07de50";
 
-        private readonly List<TagName> _tagNames;
-
         private readonly DescriptionFormatter _descriptionFormatter;
+
+        private readonly List<TagName> _tagNames;
 
         public VndbMetadataPlugin(IPlayniteAPI playniteApi) : base(playniteApi)
         {
@@ -38,16 +35,6 @@ namespace playnite.metadata.vndb
                 .WithTimeout(10000);
             _descriptionFormatter = new DescriptionFormatter();
             CreateSettingsIfNotExists();
-        }
-
-        private void CreateSettingsIfNotExists()
-        {
-            var settings = LoadPluginSettings<VndbMetadataSettings>();
-            if (settings == null)
-            {
-                settings = new VndbMetadataSettings();
-                SavePluginSettings(settings);
-            }
         }
 
         public Vndb VndbClient { get; }
@@ -70,6 +57,16 @@ namespace playnite.metadata.vndb
             MetadataField.CriticScore,
             MetadataField.CommunityScore
         };
+
+        private void CreateSettingsIfNotExists()
+        {
+            var settings = LoadPluginSettings<VndbMetadataSettings>();
+            if (settings == null)
+            {
+                settings = new VndbMetadataSettings();
+                SavePluginSettings(settings);
+            }
+        }
 
         private static void HandleInvalidFlags(string method, VndbFlags provided, VndbFlags invalid)
         {

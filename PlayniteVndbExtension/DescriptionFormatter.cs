@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace VndbSharp
+namespace PlayniteVndbExtension
 {
     public class DescriptionFormatter
     {
