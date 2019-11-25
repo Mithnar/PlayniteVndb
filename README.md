@@ -22,8 +22,14 @@ VNDB is a comprehensive database for Visual Novels
 ## Release History
 For the detailed release history, head over to the [Changelog](https://github.com/Mithnar/PlayniteVndb/blob/master/CHANGELOG.md)
 
-### Recent Release:
-- [1.0](https://github.com/Mithnar/PlayniteVndb/releases/tag/1.0)
+### Recent Releases:
+#### [1.0.1](https://github.com/Mithnar/PlayniteVndb/releases/tag/1.0.1)
+##### Fixed
+- [Playnite #3](https://playnite.link/forum/thread-24-post-49.html#pid49) Incomplete release dates will now longer crash metadata downloading
+##### Changed
+- Tags without a matching name will now be ignored, instead of being shown as "UNKNOWN TAG"
+
+#### [1.0](https://github.com/Mithnar/PlayniteVndb/releases/tag/1.0)
 ##### Fixed
 - [Issue #1](https://github.com/Mithnar/PlayniteVndb/issues/1) Format URLs in a way Playnite understands it
 - [Issue #2](https://github.com/Mithnar/PlayniteVndb/issues/2) Tags should not show as "UNKNOWN TAG" if they are filtered out by Category
