@@ -259,7 +259,7 @@ namespace PlayniteVndbExtension
 
         public override MetadataFile GetCoverImage()
         {
-            if (!AvailableFields.Contains(MetadataField.CoverImage))
+            if (!AvailableFields.Contains(MetadataField.CoverImage) && _vnData.Image != null)
                 if (!_vnData.IsImageNsfw || _settings.AllowNsfwImages)
                     return new MetadataFile(_vnData.Image);
 
