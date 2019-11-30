@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Documents;
 using Playnite.SDK;
 using Playnite.SDK.Metadata;
 using Playnite.SDK.Models;
@@ -111,19 +113,25 @@ namespace PlayniteVndbExtension
         private bool GetVndbMetadata()
         {
             if (_vnData != null) return true;
-
+            
             if (_options.IsBackgroundDownload) return false;
+            ReadOnlyCollection<VisualNovel> results = new ReadOnlyCollection<VisualNovel>(new List<VisualNovel>());
             var item = _playniteApi.Dialogs.ChooseItemWithSearch(null, searchString =>
             {
-                var results = _vndbClient
+                var search = _vndbClient
                     .GetVisualNovelAsync(VndbFilters.Search.Fuzzy(searchString), VndbFlags.FullVisualNovel).Result
                     .Items;
-                return results.Select(vn => vn as GenericItemOption).ToList();
+                results = search;
+                return search.Select(vn =>
+                    {
+                        return new GenericItemOption(vn.Name, _descriptionFormatter.RemoveTags(vn.Description));
+                    })
+                    .ToList();
             }, _options.GameData.Name);
 
-            if (item != null)
+            if (item != null && results.Any(vn => vn.Name.Equals(item.Name)))
             {
-                _vnData = item as VisualNovel;
+                _vnData = results.First(vn => vn.Name.Equals(item.Name));
                 _vnProducers = _vndbClient
                     .GetReleaseAsync(VndbFilters.VisualNovel.Equals(_vnData.Id), VndbFlags.Producers)
                     .Result
@@ -139,22 +147,27 @@ namespace PlayniteVndbExtension
 
         public override string GetName()
         {
-            if (AvailableFields.Contains(MetadataField.Name)) return _vnData.Name;
+            if (AvailableFields.Contains(MetadataField.Name) && _vnData != null) 
+                return _vnData.Name;
 
             return base.GetName();
         }
 
         public override List<string> GetGenres()
         {
-            if (!AvailableFields.Contains(MetadataField.Genres)) return base.GetGenres();
-            var genres = new List<string>();
-            genres.Add("Visual Novel");
-            return genres;
+            if (AvailableFields.Contains(MetadataField.Genres) && _vnData != null)
+            {
+                var genres = new List<string>();
+                genres.Add("Visual Novel");
+                return genres;
+            }
+            
+            return base.GetGenres();
         }
 
         public override DateTime? GetReleaseDate()
         {
-            if (AvailableFields.Contains(MetadataField.ReleaseDate))
+            if (AvailableFields.Contains(MetadataField.ReleaseDate) && _vnData != null)
                 if (_vnData.Released.Day != null && _vnData.Released.Month != null && _vnData.Released.Year != null)
                 {
                     return new DateTime
@@ -177,7 +190,7 @@ namespace PlayniteVndbExtension
 
         public override List<string> GetDevelopers()
         {
-            if (AvailableFields.Contains(MetadataField.Developers))
+            if (AvailableFields.Contains(MetadataField.Developers) && _vnData != null)
                 return new ComparableList<string>(_vnProducers.Where(p => p.IsDeveloper).Select(p => p.Name)
                     .Distinct());
 
@@ -186,7 +199,7 @@ namespace PlayniteVndbExtension
 
         public override List<string> GetPublishers()
         {
-            if (AvailableFields.Contains(MetadataField.Developers))
+            if (AvailableFields.Contains(MetadataField.Developers) && _vnData != null)
                 return new ComparableList<string>(_vnProducers.Where(p => p.IsPublisher).Select(p => p.Name)
                     .Distinct());
 
@@ -195,7 +208,7 @@ namespace PlayniteVndbExtension
 
         public override List<string> GetTags()
         {
-            if (AvailableFields.Contains(MetadataField.Tags))
+            if (AvailableFields.Contains(MetadataField.Tags) && _vnData != null)
             {
                 var tags = _vnData.Tags.Select(MapTagToNamedTuple)
                     .Where(tag =>
@@ -252,7 +265,7 @@ namespace PlayniteVndbExtension
 
         public override string GetDescription()
         {
-            if (AvailableFields.Contains(MetadataField.Description))
+            if (AvailableFields.Contains(MetadataField.Description) && _vnData != null)
                 return _descriptionFormatter.Format(_vnData.Description);
 
             return base.GetDescription();
@@ -260,14 +273,15 @@ namespace PlayniteVndbExtension
 
         public override int? GetCommunityScore()
         {
-            if (AvailableFields.Contains(MetadataField.CommunityScore)) return (int) (_vnData.Rating * 10.0);
+            if (AvailableFields.Contains(MetadataField.CommunityScore) && _vnData != null) 
+                return (int) (_vnData.Rating * 10.0);
 
             return base.GetCommunityScore();
         }
 
         public override MetadataFile GetCoverImage()
         {
-            if (!AvailableFields.Contains(MetadataField.CoverImage) && _vnData.Image != null)
+            if (AvailableFields.Contains(MetadataField.CoverImage) && _vnData != null)
                 if (!_vnData.IsImageNsfw || _settings.AllowNsfwImages)
                     return new MetadataFile(_vnData.Image);
 
@@ -277,29 +291,35 @@ namespace PlayniteVndbExtension
 
         public override MetadataFile GetBackgroundImage()
         {
-            if (!AvailableFields.Contains(MetadataField.BackgroundImage)) return base.GetBackgroundImage();
-            var selection = (from screenshot in _vnData.Screenshots
-                where !screenshot.IsNsfw || _settings.AllowNsfwImages
-                select new ImageFileOption(screenshot.Url)).ToList();
+            if (AvailableFields.Contains(MetadataField.BackgroundImage) && _vnData != null)
+            {
+                var selection = (from screenshot in _vnData.Screenshots
+                    where !screenshot.IsNsfw || _settings.AllowNsfwImages
+                    select new ImageFileOption(screenshot.Url)).ToList();
 
-            var background = _playniteApi.Dialogs.ChooseImageFile(selection, "Screenshots");
-            if (background != null) return new MetadataFile(background.Path);
+                var background = _playniteApi.Dialogs.ChooseImageFile(selection, "Screenshots");
+                if (background != null) return new MetadataFile(background.Path);
+            }
 
             return base.GetBackgroundImage();
         }
 
         public override List<Link> GetLinks()
         {
-            if (!AvailableFields.Contains(MetadataField.Links)) return base.GetLinks();
-            var links = new List<Link> {new Link("VNDB", "https://vndb.org/v" + _vnData.Id)};
-            if (!string.IsNullOrWhiteSpace(_vnData.VisualNovelLinks.Wikipedia))
-                links.Add(new Link("Wikipedia", "https://en.wikipedia.org/wiki/" + _vnData.VisualNovelLinks.Wikipedia));
-            if (!string.IsNullOrWhiteSpace(_vnData.VisualNovelLinks.Renai))
-                links.Add(new Link("Renai", "https://renai.us/game/" + _vnData.VisualNovelLinks.Renai));
-            if (!string.IsNullOrWhiteSpace(_vnData.VisualNovelLinks.Wikidata))
-                links.Add(new Link("Wikidata", "https://www.wikidata.org/wiki/" + _vnData.VisualNovelLinks.Wikidata));
+            if (AvailableFields.Contains(MetadataField.Links) && _vnData != null)
+            {
+                var links = new List<Link> {new Link("VNDB", "https://vndb.org/v" + _vnData.Id)};
+                if (!string.IsNullOrWhiteSpace(_vnData.VisualNovelLinks.Wikipedia))
+                    links.Add(new Link("Wikipedia", "https://en.wikipedia.org/wiki/" + _vnData.VisualNovelLinks.Wikipedia));
+                if (!string.IsNullOrWhiteSpace(_vnData.VisualNovelLinks.Renai))
+                    links.Add(new Link("Renai", "https://renai.us/game/" + _vnData.VisualNovelLinks.Renai));
+                if (!string.IsNullOrWhiteSpace(_vnData.VisualNovelLinks.Wikidata))
+                    links.Add(new Link("Wikidata", "https://www.wikidata.org/wiki/" + _vnData.VisualNovelLinks.Wikidata));
 
-            return links;
+                return links; 
+            }
+            
+            return base.GetLinks();
         }
     }
 }

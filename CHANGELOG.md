@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Add option to enable incomplete dates
+- [Playnite #10](https://playnite.link/forum/thread-24-post-67.html#pid67) Add option to enable incomplete dates
+### Changed
+- [Playnite #2](https://playnite.link/forum/thread-24-post-48.html#pid48) Game description in game selection will no longer show any url tags
 ### Fixed
 - Fix error when cancelling game selection
 
@@ -41,7 +43,7 @@ Special Thanks to [darklinkpower](https://github.com/darklinkpower) for testing 
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/Mithnar/PlayniteVndb/compare/1.0...HEAD
+[Unreleased]: https://github.com/Mithnar/PlayniteVndb/compare/1.0.1...HEAD
 [1.0.1]: https://github.com/Mithnar/PlayniteVndb/compare/1.0...1.0.1
 [1.0]: https://github.com/Mithnar/PlayniteVndb/compare/1.0-RC3...1.0
 [1.0-RC3]: https://github.com/Mithnar/PlayniteVndb/compare/1.0-RC2...1.0-RC3

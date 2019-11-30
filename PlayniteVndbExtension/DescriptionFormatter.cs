@@ -18,5 +18,10 @@ namespace PlayniteVndbExtension
             formatted = _urlMatcher.Replace(formatted, "<a href=\"$1\">$2</a>");
             return formatted;
         }
+        
+        public string RemoveTags(string description)
+        {
+            return description == null ? "" : _urlMatcher.Replace(description, "$2");
+        }
     }
 }

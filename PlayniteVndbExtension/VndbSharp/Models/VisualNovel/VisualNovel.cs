@@ -7,7 +7,7 @@ using VndbSharp.Models.Common;
 
 namespace VndbSharp.Models.VisualNovel
 {
-	public class VisualNovel: GenericItemOption
+	public class VisualNovel
 	{
 		private VisualNovel() { }
 
