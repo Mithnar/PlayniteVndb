@@ -66,8 +66,9 @@ namespace PlayniteVndbExtension
                 _vnData.Screenshots.Any(image => !image.IsNsfw || _settings.AllowNsfwImages))
                 fields.Add(MetadataField.BackgroundImage);
 
-            if (_vnData.Released != null && _vnData.Released.Day != null && _vnData.Released.Month != null &&
-                _vnData.Released.Year != null)
+            if (_vnData.Released != null && _vnData.Released.Year != null 
+                                         && ((_vnData.Released.Month != null && _vnData.Released.Day != null) 
+                                             || _settings.AllowIncompleteDates) )
                 fields.Add(MetadataField.ReleaseDate);
 
             fields.Add(MetadataField.Genres);
@@ -155,14 +156,21 @@ namespace PlayniteVndbExtension
         {
             if (AvailableFields.Contains(MetadataField.ReleaseDate))
                 if (_vnData.Released.Day != null && _vnData.Released.Month != null && _vnData.Released.Year != null)
+                {
                     return new DateTime
                     (
                         (int) _vnData.Released.Year.Value,
                         _vnData.Released.Month.Value,
                         _vnData.Released.Day.Value
                     );
-
-
+                }
+                else if (_vnData.Released.Year != null && _settings.AllowIncompleteDates)
+                {
+                    var day = _vnData.Released.Day ?? 1;
+                    var month = _vnData.Released.Month ?? 1;
+                    return new DateTime((int) _vnData.Released.Year.Value, month, day);
+                }
+            
             return base.GetReleaseDate();
         }
 

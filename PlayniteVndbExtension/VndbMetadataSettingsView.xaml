@@ -46,5 +46,14 @@
                           ItemsSource="{Binding Source={StaticResource GetDataFromEnum}}" />
             </StackPanel>
         </StackPanel>
+        <Separator />
+        <StackPanel>
+            <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="Dates:" />
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <TextBlock Text="Allow incomplete dates: " />
+                <CheckBox IsChecked="{Binding AllowIncompleteDates}" />
+                <TextBlock Text=" (missing day will show as 01, missing month will show as january)" />
+            </StackPanel>
+        </StackPanel>
     </StackPanel>
 </UserControl>
