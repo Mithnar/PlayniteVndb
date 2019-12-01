@@ -59,14 +59,10 @@ namespace VndbSharp.Models.Common
 
 		public override String ToString()
 		{
-			switch (this.Month)
-			{
-				case null when this.Day == null && this.Year == null:
-					return "tba";
-				case null:
-					return $"{this.Year:0000}";
-			}
-
+			if (this.Month == null && this.Day == null && this.Year == null)
+				return "tba";
+			if (this.Month == null)
+				return $"{this.Year:0000}";
 			if (this.Day == null)
 				return $"{this.Year:0000}-{this.Month:00}";
 

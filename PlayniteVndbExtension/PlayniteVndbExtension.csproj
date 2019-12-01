@@ -123,6 +123,7 @@
     <Compile Include="VndbMetadataSettingsView.xaml.cs">
       <DependentUpon>VndbMetadataSettingsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="VndbSharp\Attributes\DescriptionAttribute.cs" />
     <Compile Include="VndbSharp\Attributes\FlagIdentityAttribute.cs" />
     <Compile Include="VndbSharp\Attributes\IsCsvAttribute.cs" />
     <Compile Include="VndbSharp\Attributes\IsUnixTimestampAttribute.cs" />
@@ -143,14 +144,31 @@
     <Compile Include="VndbSharp\Json\Converters\CommaSeparatedValueConverter.cs" />
     <Compile Include="VndbSharp\Json\Converters\DurationToDateTimeOffsetConverter.cs" />
     <Compile Include="VndbSharp\Json\Converters\GenericEnumConverter.cs" />
+    <Compile Include="VndbSharp\Json\Converters\GenericNullableEnumConverter.cs" />
+    <Compile Include="VndbSharp\Json\Converters\SecureStringConverter.cs" />
     <Compile Include="VndbSharp\Json\Converters\SimpleDateConverter.cs" />
     <Compile Include="VndbSharp\Json\Converters\UnixTimestampConverter.cs" />
     <Compile Include="VndbSharp\Json\VndbContractResolver.cs" />
+    <Compile Include="VndbSharp\Models\Character\BloodType.cs" />
+    <Compile Include="VndbSharp\Models\Character\Character.cs" />
+    <Compile Include="VndbSharp\Models\Character\CharacterInstances.cs" />
+    <Compile Include="VndbSharp\Models\Character\CharacterRole.cs" />
+    <Compile Include="VndbSharp\Models\Character\TraitMetadata.cs" />
+    <Compile Include="VndbSharp\Models\Character\VisualNovelMetadata.cs" />
+    <Compile Include="VndbSharp\Models\Character\VoiceActorMetadata.cs" />
     <Compile Include="VndbSharp\Models\Common\CommonLinks.cs" />
+    <Compile Include="VndbSharp\Models\Common\Gender.cs" />
+    <Compile Include="VndbSharp\Models\Common\Priority.cs" />
     <Compile Include="VndbSharp\Models\Common\ProducerCommon.cs" />
     <Compile Include="VndbSharp\Models\Common\SimpleDate.cs" />
     <Compile Include="VndbSharp\Models\Common\SpoilerLevel.cs" />
+    <Compile Include="VndbSharp\Models\Common\Status.cs" />
     <Compile Include="VndbSharp\Models\DatabaseStats.cs" />
+    <Compile Include="VndbSharp\Models\Dumps\Tag.cs" />
+    <Compile Include="VndbSharp\Models\Dumps\TagCategory.cs" />
+    <Compile Include="VndbSharp\Models\Dumps\Trait.cs" />
+    <Compile Include="VndbSharp\Models\Dumps\Vote.cs" />
+    <Compile Include="VndbSharp\Models\Dumps\VoteDumpVersion.cs" />
     <Compile Include="VndbSharp\Models\Errors\BadArgumentError.cs" />
     <Compile Include="VndbSharp\Models\Errors\BadAuthenticationError.cs" />
     <Compile Include="VndbSharp\Models\Errors\Error.cs" />
@@ -168,22 +186,41 @@
     <Compile Include="VndbSharp\Models\Errors\ThrottledType.cs" />
     <Compile Include="VndbSharp\Models\FilterOperator.cs" />
     <Compile Include="VndbSharp\Models\Login.cs" />
+    <Compile Include="VndbSharp\Models\Producer\Producer.cs" />
+    <Compile Include="VndbSharp\Models\Producer\ProducerLinks.cs" />
+    <Compile Include="VndbSharp\Models\Producer\Relationship.cs" />
+    <Compile Include="VndbSharp\Models\Release\Animated.cs" />
+    <Compile Include="VndbSharp\Models\Release\Media.cs" />
     <Compile Include="VndbSharp\Models\Release\ProducerRelease.cs" />
     <Compile Include="VndbSharp\Models\Release\Release.cs" />
+    <Compile Include="VndbSharp\Models\Release\ReleaseType.cs" />
     <Compile Include="VndbSharp\Models\Release\VisualNovelMetadata.cs" />
+    <Compile Include="VndbSharp\Models\Release\Voiced.cs" />
+    <Compile Include="VndbSharp\Models\Staff\Staff.cs" />
+    <Compile Include="VndbSharp\Models\Staff\StaffAliases.cs" />
+    <Compile Include="VndbSharp\Models\Staff\StaffLinks.cs" />
+    <Compile Include="VndbSharp\Models\Staff\StaffVns.cs" />
+    <Compile Include="VndbSharp\Models\Staff\StaffVoiced.cs" />
+    <Compile Include="VndbSharp\Models\User\User.cs" />
     <Compile Include="VndbSharp\Models\User\VisualNovelList.cs" />
     <Compile Include="VndbSharp\Models\User\VoteList.cs" />
     <Compile Include="VndbSharp\Models\User\Wishlist.cs" />
+    <Compile Include="VndbSharp\Models\VisualNovel\AnimeMetadata.cs" />
+    <Compile Include="VndbSharp\Models\VisualNovel\RelationType.cs" />
     <Compile Include="VndbSharp\Models\VisualNovel\ScreenshotMetadata.cs" />
+    <Compile Include="VndbSharp\Models\VisualNovel\StaffMetadata.cs" />
     <Compile Include="VndbSharp\Models\VisualNovel\TagMetadata.cs" />
     <Compile Include="VndbSharp\Models\VisualNovel\VisualNovel.cs" />
+    <Compile Include="VndbSharp\Models\VisualNovel\VisualNovelLength.cs" />
     <Compile Include="VndbSharp\Models\VisualNovel\VisualNovelLinks.cs" />
+    <Compile Include="VndbSharp\Models\VisualNovel\VisualNovelRelation.cs" />
     <Compile Include="VndbSharp\Models\VndbFlags.cs" />
     <Compile Include="VndbSharp\Models\VndbResponse.cs" />
     <Compile Include="VndbSharp\UnexpectedResponseException.cs" />
     <Compile Include="VndbSharp\Vndb.cs" />
     <Compile Include="VndbSharp\Vndb.GetMethods.cs" />
     <Compile Include="VndbSharp\Vndb.Helpers.cs" />
+    <Compile Include="VndbSharp\Vndb.SetMethods.cs" />
     <Compile Include="VndbSharp\VndbFilters.cs" />
     <Compile Include="VndbSharp\VndbUtils.cs" />
   </ItemGroup>
@@ -192,7 +229,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="tag_dump.json" />
-    <Content Include="VndbSharp\LICENSE" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="VndbMetadataSettingsView.xaml" />

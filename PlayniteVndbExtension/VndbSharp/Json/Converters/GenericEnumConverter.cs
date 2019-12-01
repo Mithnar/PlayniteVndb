@@ -20,14 +20,10 @@ namespace VndbSharp.Json.Converters
 
 		public override Object ReadJson(JsonReader reader, Type objectType, Object existingValue, JsonSerializer serializer)
 		{
-			switch (reader.TokenType)
-			{
-				case JsonToken.Integer:
-					return EnumConverter<TEnum>.Instance((Int64) reader.Value);
-				case JsonToken.Null:
-					return default(TEnum);
-			}
-
+			if (reader.TokenType == JsonToken.Integer)
+				return EnumConverter<TEnum>.Instance((Int64) reader.Value);
+			if (reader.TokenType == JsonToken.Null)
+				return default(TEnum);
 			if (reader.TokenType != JsonToken.String)
 			{
 				Debug.WriteLine($"Unsupported Token Type passed to GenericEnumConverter for {typeof(TEnum)}. " +

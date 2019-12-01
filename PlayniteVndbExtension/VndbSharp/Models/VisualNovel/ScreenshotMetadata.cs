@@ -11,5 +11,7 @@ namespace VndbSharp.Models.VisualNovel
 		public String ReleaseId { get; private set; }
 		[JsonProperty("nsfw")]
 		public Boolean IsNsfw { get; private set; }
+		public Int32 Height { get; private set; }
+		public Int32 Width { get; private set; }
 	}
 }

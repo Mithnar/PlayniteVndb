@@ -1,14 +1,12 @@
 ﻿﻿using System;
-using Newtonsoft.Json;
 
-namespace VndbSharp.Models.Release
+namespace VndbSharp.Models.Producer
 {
-	public class VisualNovelMetadata
+	public class Relationship
 	{
 		public UInt32 Id { get; private set; }
-		[JsonProperty("title")]
+		public String Relation { get; private set; } // TODO: Enum?
 		public String Name { get; private set; }
-		[JsonProperty("original")]
 		public String OriginalName { get; private set; }
 	}
 }

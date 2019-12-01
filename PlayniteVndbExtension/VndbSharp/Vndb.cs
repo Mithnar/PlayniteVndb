@@ -26,6 +26,48 @@ namespace VndbSharp
 			this.UseTls = useTls;
 		}
 
+#if UserAuth
+		[Obsolete("SecureString is not secure on non-Windows OSes when using .Net Core, or at all in Mono.\n" +
+				  "By Removing this attribute, you acknowledge the risks and will not make PRs or Issues " +
+				  "regarding this unless the situation in .Net Core / Mono changes.", true)]
+		public Vndb(String username, SecureString password)
+		{
+#warning SecureString is not secure on non-Windows OSes when using .Net Core, or at all in Mono. By removing the ObsoleteAttribute on this constructor, and/or this warning, you acknowledge the risks and will not make PRs or Issues regarding this unless the situation in .Net Core / Mono changes.
+			// To read more above the above messages, check out https://github.com/Nikey646/VndbSharp/wiki/Mono-and-.Net-Core#securestring--username--password-logins
+			// If that link is down, do some research on SecureString implementations in .Net Core, to see if they encrypt the data in memory on Unix.
+			this.UseTls = true;
+			this.Username = username;
+			this.Password = password;
+			this.Password.MakeReadOnly();
+		}
+#endif
+
+		/// <summary>
+		///		Issues the provided command to the Vndb API
+		/// </summary>
+		/// <param name="command">The command you want to issue</param>
+		/// <returns>The raw result of the command unparsed, or the String representation of the exception that occured</returns>
+		public async Task<String> DoRawAsync(String command)
+		{
+			try
+			{
+				if (!await this.LoginAsync().ConfigureAwait(false))
+					return this.GetLastErrorJson();
+
+				this.RenewCts();
+				await this.SendDataAsync(this.FormatRequest(command), this.CancellationTokenSource.Token)
+					.TimeoutAfter(this.SendTimeout)
+					.ConfigureAwait(false);
+				return await this.GetResponseAsync(this.CancellationTokenSource.Token)
+					.TimeoutAfter(this.ReceiveTimeout)
+					.ConfigureAwait(false);
+			}
+			catch (Exception crap)
+			{
+				return crap.ToString();
+			}
+		}
+
 		#region .  Public Properties  .
 
 		/// <inheritdoc cref="TcpClient.SendBufferSize"/>
@@ -98,6 +140,13 @@ namespace VndbSharp
 		/// </summary>
 		public Boolean CheckFlags { get; set; } = true;
 
+#if UserAuth
+		/// <summary>
+		///		Indicates if a User is Logged in or not
+		/// </summary>
+		public Boolean IsUserAuthenticated => this.Password != null && this.Stream != null;
+#endif
+
 		#endregion
 
 		#region .  Protected Fields  .
@@ -126,6 +175,23 @@ namespace VndbSharp
 		///		The Connections Stream, for Reading and Writing
 		/// </summary>
 		protected Stream Stream;
+
+		/// <summary>
+		///		The raw json of the last error.
+		/// </summary>
+		protected String LastErrorJson;
+
+		#if UserAuth
+		/// <summary>
+		///		The users username, if provided
+		/// </summary>
+		protected String Username;
+
+		/// <summary>
+		///		The users password, as a secure string
+		/// </summary>
+		protected SecureString Password;
+		#endif
 
 		/// <summary>
 		///		The Connections Client

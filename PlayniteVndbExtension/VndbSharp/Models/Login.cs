@@ -14,6 +14,21 @@ namespace VndbSharp.Models
 			this.ClientVersion = VndbUtils.ClientVersion;
 		}
 
+#if UserAuth
+		public Login(String username, SecureString password)
+			: this()
+		{
+			this.Username = username;
+			this.Password = password;
+		}
+
+		[JsonProperty("password")]
+		public SecureString Password { get; set; }
+
+		[JsonProperty("username")]
+		public String Username { get; set; }
+#endif
+
 		[JsonProperty("protocol")]
 		public UInt32 ProtocolVersion = 1;
 

@@ -6,8 +6,14 @@ using Newtonsoft.Json.Serialization;
 using VndbSharp.Attributes;
 using VndbSharp.Extensions;
 using VndbSharp.Json.Converters;
- using VndbSharp.Models.Errors;
+using VndbSharp.Models.Character;
+using VndbSharp.Models.Common;
+using VndbSharp.Models.Dumps;
+using VndbSharp.Models.Errors;
+using VndbSharp.Models.Release;
+using VndbSharp.Models.Staff;
 using VndbSharp.Models.VisualNovel;
+using CharacterVisualNovelMetadata = VndbSharp.Models.Character.VisualNovelMetadata;
 
 namespace VndbSharp.Json
 {
@@ -18,10 +24,21 @@ namespace VndbSharp.Json
 			this.CustomConverters = new JsonConverter[]
 			{
 				new SimpleDateConverter(),
-				new DurationToDateTimeOffsetConverter(),
+				new DurationToDateTimeOffsetConverter(), 
+#if UserAuth 
+				new SecureStringConverter(),
+#endif
+				new ArrayOfArraysConverter<CharacterVisualNovelMetadata>(),
+				new ArrayOfArraysConverter<TraitMetadata>(),
 				new ArrayOfArraysConverter<TagMetadata>(),
+				new ArrayOfArraysConverter<StaffAliases>(), 
+				new GenericNullableEnumConverter<Gender, Gender?>(), // Ugly hack to return null when not present
+				new GenericEnumConverter<RelationType>(), 
+				new GenericEnumConverter<TagCategory>(),
 				new GenericEnumConverter<ErrorType>(),
 				new GenericEnumConverter<ThrottledType>(), 
+				new GenericEnumConverter<Voiced>(), 
+				new GenericEnumConverter<Animated>(), 
 			};
 		}
 
@@ -29,7 +46,7 @@ namespace VndbSharp.Json
 		{
 			var prop = base.CreateProperty(member, memberSerialization);
 			// Only work with PropertyInfo's.
-			if (!(member is PropertyInfo property))
+			if (!(member is PropertyInfo property) || property == null)
 				return prop;
 
 			if (!prop.Writable)
@@ -54,8 +71,44 @@ namespace VndbSharp.Json
 		protected override JsonConverter ResolveContractConverter(Type objectType)
 		{
 			var converter = this.CustomConverters.FirstOrDefault(c => c.CanConvert(objectType));
-			return converter ?? base.ResolveContractConverter(objectType);
+			if (converter != default(JsonConverter))
+				return converter;
+			return base.ResolveContractConverter(objectType);
 		}
+
+#if ContractResolverPropertyExceptionCheck
+		// Untested
+		private static Boolean ShouldSerialize(Object instance, PropertyInfo property)
+		{
+			try
+			{
+				if (!property.CanRead)
+					return false;
+				property.GetValue(instance);
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
+		// Untested
+		private static Boolean ShouldDeserialize(Object instance, PropertyInfo property)
+		{
+			try
+			{
+				if (!property.CanWrite)
+					return false;
+				property.SetValue(instance, property.GetValue(instance));
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+#endif
 
 		internal static VndbContractResolver Instance
 			=> VndbContractResolver._instance 

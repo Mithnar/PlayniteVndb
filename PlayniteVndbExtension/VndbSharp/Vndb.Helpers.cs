@@ -1,4 +1,4 @@
-﻿﻿﻿using System;
+﻿﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Security;
@@ -24,6 +24,15 @@ namespace VndbSharp
 		///		A helper method to set the Client Name and Client Version sent to the Vndb Api
 		/// </summary>
 		/// <param name="clientName">The name of your client</param>
+		/// <param name="clientVersion">The version of your client</param>
+		/// <returns>The <see cref="Vndb"/> instance</returns>
+		public Vndb WithClientDetails(String clientName, Version clientVersion)
+			=> this.WithClientDetails(clientName, clientVersion.ToString());
+
+		/// <summary>
+		///		A helper method to set the Client Name and Client Version sent to the Vndb Api
+		/// </summary>
+		/// <param name="clientName">The name of your client</param>
 		/// <param name="clientVersion">The version of your client. Valid values: a-z 0-9 _ . / -</param>
 		/// <returns>The <see cref="Vndb"/> instance</returns>
 		/// <exception cref="ArgumentOutOfRangeException">When <paramref name="clientVersion"/> is not a valid <see cref="Version"/></exception>
@@ -33,6 +42,14 @@ namespace VndbSharp
 			VndbUtils.ClientVersion = clientVersion;
 			return this;
 		}
+
+		/// <summary>
+		///		Sets whether <see cref="VndbFlags"/> should be checked before being sent
+		/// </summary>
+		/// <param name="checkFlags">Should <see cref="VndbFlags"/> be checked before being sent</param>
+		/// <returns>The <see cref="Vndb"/> instance</returns>
+		public Vndb WithFlagsCheck(Boolean checkFlags)
+			=> this.WithFlagsCheck(checkFlags, null);
 
 		/// <summary>
 		///		Sets whether <see cref="VndbFlags"/> should be checked before being sent, and provides a callback to retrieve the invalid flags
@@ -50,6 +67,9 @@ namespace VndbSharp
 		public Vndb WithTimeout(UInt32 both)
 			=> this.WithTimeout(TimeSpan.FromMilliseconds(both));
 
+		public Vndb WithTimeout(UInt32 receive, UInt32 send)
+			=> this.WithTimeout(TimeSpan.FromMilliseconds(receive), TimeSpan.FromMilliseconds(send));
+
 		public Vndb WithTimeout(TimeSpan both)
 			=> this.WithTimeout(both, both);
 
@@ -59,7 +79,17 @@ namespace VndbSharp
 			this.SendTimeout = send;
 			return this;
 		}
-		
+
+		public Vndb WithBufferSize(Int32 both)
+			=> this.WithBufferSize(both, both);
+
+		public Vndb WithBufferSize(Int32 receive, Int32 send)
+		{
+			this.ReceiveBufferSize = receive;
+			this.SendBufferSize = send;
+			return this;
+		}
+
 		#endregion
 
 		#region .  Error Methods  .
@@ -70,6 +100,7 @@ namespace VndbSharp
 		/// <param name="json">The Error json</param>
 		protected void ParseError(String json)
 		{
+			this.LastErrorJson = json;
 			Debug.WriteLine(json);
 
 			var response = JObject.Parse(json);
@@ -116,6 +147,21 @@ namespace VndbSharp
 					break;
 			}
 		}
+
+		/// <summary>
+		///		Returns the Json of the last error to occur
+		/// </summary>
+		/// <returns>Returns the Json of the last error to occur</returns>
+		public String GetLastErrorJson()
+			=> this.LastErrorJson;
+
+		/// <summary>
+		///		Returns a <see cref="IVndbError"/> of the last error to occur
+		/// </summary>
+		/// <returns>Returns a <see cref="IVndbError"/> of the last error to occur</returns>
+		public IVndbError GetLastError()
+			=> this.LastError;
+
 		#endregion
 
 		#region .  Stream Read/Write  .
@@ -159,6 +205,52 @@ namespace VndbSharp
 		}
 
 		/// <summary>
+		///		<para>The generic set request helper</para>
+		///		<para>It takes the data to send to the Vndb API, and encodes it then sends the data and recieves a response</para>
+		///		<para>Once a response is received, it checks to see if it is a known response, and returns an approiate Model or sets the Error and returns null</para>
+		/// </summary>
+		/// <param name="method">The method to use</param>
+		/// <param name="id">The Id of the Visual Novel</param>
+		/// <param name="data">The data to be json encoded</param>
+		/// <param name="includeNulls">Should null values be included in the request</param>
+		/// <returns>True if the set method was a success, false otherwise</returns>
+		protected async Task<Boolean> SendSetRequestInternalAsync(String method, UInt32 id, Object data, Boolean includeNulls = false)
+		{
+			// Ensure we're logged in and authenticated
+#if UserAuth
+			if (!await this.LoginAsync().ConfigureAwait(false) && this.IsUserAuthenticated)
+#else
+			if (!await this.LoginAsync().ConfigureAwait(false))
+#endif
+				return false;
+
+			// For logging
+			var requestData = this.FormatRequest($"{method} {id}", data, includeNulls);
+			Debug.WriteLine($"Set Send | {this.GetString(requestData)}"); // Only performance issue in Debug build
+			this.RenewCts(); // Send the data with a fresh CancellationToken
+			await this.SendDataAsync(requestData, this.CancellationTokenSource.Token)
+				.TimeoutAfter(this.SendTimeout)
+				.ConfigureAwait(false);
+
+			this.RenewCts(); // Receive the response with a fresh CancellationToken
+			var response = await this.GetResponseAsync(this.CancellationTokenSource.Token)
+				.TimeoutAfter(this.ReceiveTimeout)
+				.ConfigureAwait(false);
+			Debug.WriteLine($"Set Response | {response}");
+
+			// Parse the response, expecting 1 value equal to "ok"
+			var results = response.ToVndbResults();
+			if (results[0] == Constants.Ok)
+				return true;
+
+			if (results.Length == 2 && results[0] != Constants.Error)
+				throw new UnexpectedResponseException(this.GetString(requestData), response);
+
+			this.ParseError(results[1]);
+			return false;
+		}
+
+		/// <summary>
 		///		Sends the request to the Vndb Api by writing to the <see cref="Vndb.Stream"/>
 		/// </summary>
 		/// <param name="data"></param>
@@ -175,6 +267,7 @@ namespace VndbSharp
 		protected async Task<String> GetResponseAsync(CancellationToken cancellationToken)
 		{
 			this.LastError = null;
+			this.LastErrorJson = String.Empty;
 
 			var ms = new MemoryStream();
 			var buffer = new Byte[this.ReceiveBufferSize];
