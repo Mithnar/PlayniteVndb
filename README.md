@@ -15,26 +15,21 @@ VNDB is a comprehensive database for Visual Novels
 - You can now use "Download Metadata" under "Edit Game Details" to use VNDB as a metadata source
 
 ## Screenshots
-![alt text](https://raw.githubusercontent.com/Mithnar/PlayniteVndb/readme/images/vndb_settings.png "Settings")
-![alt text](https://raw.githubusercontent.com/Mithnar/PlayniteVndb/readme/images/vndb_selection.png "game selection")
-![alt text](https://raw.githubusercontent.com/Mithnar/PlayniteVndb/readme/images/vndb_images.png "background selection")
+![Settings](https://raw.githubusercontent.com/Mithnar/PlayniteVndb/readme/images/vndb_settings.png "Settings")
+![Game Selection](https://raw.githubusercontent.com/Mithnar/PlayniteVndb/readme/images/vndb_selection.png "game selection")
+![Background Selection](https://raw.githubusercontent.com/Mithnar/PlayniteVndb/readme/images/vndb_images.png "background selection")
 
 ## Release History
 For the detailed release history, head over to the [Changelog](https://github.com/Mithnar/PlayniteVndb/blob/master/CHANGELOG.md)
 
 ### Recent Releases:
-#### [1.0.1](https://github.com/Mithnar/PlayniteVndb/releases/tag/1.0.1)
-##### Fixed
-- [Playnite #3](https://playnite.link/forum/thread-24-post-49.html#pid49) Incomplete release dates will now longer crash metadata downloading
+#### [1.1](https://github.com/Mithnar/PlayniteVndb/releases/tag/1.1)
+##### Added
+- [Playnite #10](https://playnite.link/forum/thread-24-post-67.html#pid67) Add option to enable incomplete dates
 ##### Changed
-- Tags without a matching name will now be ignored, instead of being shown as "UNKNOWN TAG"
-
-#### [1.0](https://github.com/Mithnar/PlayniteVndb/releases/tag/1.0)
+- [Playnite #2](https://playnite.link/forum/thread-24-post-48.html#pid48) Game description in game selection will no longer show any url tags
 ##### Fixed
-- [Issue #1](https://github.com/Mithnar/PlayniteVndb/issues/1) Format URLs in a way Playnite understands it
-- [Issue #2](https://github.com/Mithnar/PlayniteVndb/issues/2) Tags should not show as "UNKNOWN TAG" if they are filtered out by Category
-- [Issue #3](https://github.com/Mithnar/PlayniteVndb/issues/3) Line breaks should now be properly formatted
-- [Issue #4](https://github.com/Mithnar/PlayniteVndb/issues/4) Tags should not show as "UNKNOWN TAG" if they are filtered out by Score
+- Fix error when cancelling game selection
 
 ## Credits
 https://github.com/KuroThing
