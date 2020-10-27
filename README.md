@@ -1,11 +1,9 @@
 # Playnite VNDB Metadata Extension
 > Enables VNDB as a Metadata source for Playnite
 
-Initial Release of the VNDB Playnite Extension.
+VNDB is a comprehensive database for Visual Novels
 
 https://vndb.org/
-
-VNDB is a comprehensive database for Visual Novels
 
 ## Installation
 
@@ -22,7 +20,14 @@ VNDB is a comprehensive database for Visual Novels
 ## Release History
 For the detailed release history, head over to the [Changelog](https://github.com/Mithnar/PlayniteVndb/blob/master/CHANGELOG.md)
 
+
 ### Recent Releases:
+#### [1.1.1](https://github.com/Mithnar/PlayniteVndb/releases/tag/1.1.1)
+##### Changed
+- [Issue #10](https://github.com/Mithnar/PlayniteVndb/issues/10) Use VndbSharp Nuget Package
+##### Fixed
+- [Issue #11](https://github.com/Mithnar/PlayniteVndb/issues/11) Added Id property to manifest for automatic installation
+
 #### [1.1](https://github.com/Mithnar/PlayniteVndb/releases/tag/1.1)
 ##### Added
 - [Playnite #10](https://playnite.link/forum/thread-24-post-67.html#pid67) Add option to enable incomplete dates
