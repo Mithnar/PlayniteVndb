@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Documents;
 using Playnite.SDK;
 using Playnite.SDK.Metadata;
 using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
 using VndbSharp;
 using VndbSharp.Models;
+using VndbSharp.Models.Common;
 using VndbSharp.Models.Release;
 using VndbSharp.Models.VisualNovel;
 
@@ -61,11 +61,11 @@ namespace PlayniteVndbExtension
 
             if (!string.IsNullOrEmpty(_vnData.Description)) fields.Add(MetadataField.Description);
 
-            if (_vnData.Image != null && (!_vnData.IsImageNsfw || _settings.AllowNsfwImages))
+            if (_vnData.Image != null && (!(_vnData.ImageRating.SexualAvg >= 0.5 || _vnData.ImageRating.ViolenceAvg >= 0.5) || _settings.AllowNsfwImages))
                 fields.Add(MetadataField.CoverImage);
 
             if (_vnData.Screenshots.HasItems() &&
-                _vnData.Screenshots.Any(image => !image.IsNsfw || _settings.AllowNsfwImages))
+                _vnData.Screenshots.Any(image => !(image.ImageRating.SexualAvg >= 0.5 || image.ImageRating.ViolenceAvg >= 0.5) || _settings.AllowNsfwImages))
                 fields.Add(MetadataField.BackgroundImage);
 
             if (_vnData.Released != null && _vnData.Released.Year != null 
@@ -282,7 +282,7 @@ namespace PlayniteVndbExtension
         public override MetadataFile GetCoverImage()
         {
             if (AvailableFields.Contains(MetadataField.CoverImage) && _vnData != null)
-                if (!_vnData.IsImageNsfw || _settings.AllowNsfwImages)
+                if (!(_vnData.ImageRating.SexualAvg >= 0.5 || _vnData.ImageRating.ViolenceAvg >= 0.5) || _settings.AllowNsfwImages)
                     return new MetadataFile(_vnData.Image);
 
 
@@ -294,7 +294,7 @@ namespace PlayniteVndbExtension
             if (AvailableFields.Contains(MetadataField.BackgroundImage) && _vnData != null)
             {
                 var selection = (from screenshot in _vnData.Screenshots
-                    where !screenshot.IsNsfw || _settings.AllowNsfwImages
+                    where !(screenshot.ImageRating.SexualAvg >= 0.5 || screenshot.ImageRating.ViolenceAvg >= 0.5) || _settings.AllowNsfwImages
                     select new ImageFileOption(screenshot.Url)).ToList();
 
                 var background = _playniteApi.Dialogs.ChooseImageFile(selection, "Screenshots");
@@ -309,8 +309,6 @@ namespace PlayniteVndbExtension
             if (AvailableFields.Contains(MetadataField.Links) && _vnData != null)
             {
                 var links = new List<Link> {new Link("VNDB", "https://vndb.org/v" + _vnData.Id)};
-                if (!string.IsNullOrWhiteSpace(_vnData.VisualNovelLinks.Wikipedia))
-                    links.Add(new Link("Wikipedia", "https://en.wikipedia.org/wiki/" + _vnData.VisualNovelLinks.Wikipedia));
                 if (!string.IsNullOrWhiteSpace(_vnData.VisualNovelLinks.Renai))
                     links.Add(new Link("Renai", "https://renai.us/game/" + _vnData.VisualNovelLinks.Renai));
                 if (!string.IsNullOrWhiteSpace(_vnData.VisualNovelLinks.Wikidata))

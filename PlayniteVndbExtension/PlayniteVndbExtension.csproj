@@ -36,9 +36,10 @@
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0-preview3.19551.4\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Playnite.SDK, Version=5.1.0.0, Culture=neutral, PublicKeyToken=null">
@@ -108,6 +109,10 @@
       <HintPath>..\packages\Microsoft.Xaml.4.0.0.1\lib\UIAutomationProvider.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="VndbSharp, Version=1.1.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\VndbSharp.1.1.0\lib\net46\VndbSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WindowsBase, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
       <HintPath>..\packages\Microsoft.Xaml.4.0.0.1\lib\WindowsBase.dll</HintPath>
       <Private>True</Private>
@@ -123,106 +128,6 @@
     <Compile Include="VndbMetadataSettingsView.xaml.cs">
       <DependentUpon>VndbMetadataSettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VndbSharp\Attributes\DescriptionAttribute.cs" />
-    <Compile Include="VndbSharp\Attributes\FlagIdentityAttribute.cs" />
-    <Compile Include="VndbSharp\Attributes\IsCsvAttribute.cs" />
-    <Compile Include="VndbSharp\Attributes\IsUnixTimestampAttribute.cs" />
-    <Compile Include="VndbSharp\Attributes\RealValueAttribute.cs" />
-    <Compile Include="VndbSharp\Constants.cs" />
-    <Compile Include="VndbSharp\Extensions\EnumExtensions.cs" />
-    <Compile Include="VndbSharp\Extensions\FilterExtensions.cs" />
-    <Compile Include="VndbSharp\Extensions\ReflectionExtensions.cs" />
-    <Compile Include="VndbSharp\Extensions\StringExtensions.cs" />
-    <Compile Include="VndbSharp\Extensions\TaskExtensions.cs" />
-    <Compile Include="VndbSharp\Filters\AbstractFilter.cs" />
-    <Compile Include="VndbSharp\Filters\Conditionals\FilterAnd.cs" />
-    <Compile Include="VndbSharp\Filters\Conditionals\FilterOr.cs" />
-    <Compile Include="VndbSharp\Interfaces\IFilter.cs" />
-    <Compile Include="VndbSharp\Interfaces\IRequestOptions.cs" />
-    <Compile Include="VndbSharp\Interfaces\IVndbError.cs" />
-    <Compile Include="VndbSharp\Json\Converters\ArrayOfArraysConverter.cs" />
-    <Compile Include="VndbSharp\Json\Converters\CommaSeparatedValueConverter.cs" />
-    <Compile Include="VndbSharp\Json\Converters\DurationToDateTimeOffsetConverter.cs" />
-    <Compile Include="VndbSharp\Json\Converters\GenericEnumConverter.cs" />
-    <Compile Include="VndbSharp\Json\Converters\GenericNullableEnumConverter.cs" />
-    <Compile Include="VndbSharp\Json\Converters\SecureStringConverter.cs" />
-    <Compile Include="VndbSharp\Json\Converters\SimpleDateConverter.cs" />
-    <Compile Include="VndbSharp\Json\Converters\UnixTimestampConverter.cs" />
-    <Compile Include="VndbSharp\Json\VndbContractResolver.cs" />
-    <Compile Include="VndbSharp\Models\Character\BloodType.cs" />
-    <Compile Include="VndbSharp\Models\Character\Character.cs" />
-    <Compile Include="VndbSharp\Models\Character\CharacterInstances.cs" />
-    <Compile Include="VndbSharp\Models\Character\CharacterRole.cs" />
-    <Compile Include="VndbSharp\Models\Character\TraitMetadata.cs" />
-    <Compile Include="VndbSharp\Models\Character\VisualNovelMetadata.cs" />
-    <Compile Include="VndbSharp\Models\Character\VoiceActorMetadata.cs" />
-    <Compile Include="VndbSharp\Models\Common\CommonLinks.cs" />
-    <Compile Include="VndbSharp\Models\Common\Gender.cs" />
-    <Compile Include="VndbSharp\Models\Common\Priority.cs" />
-    <Compile Include="VndbSharp\Models\Common\ProducerCommon.cs" />
-    <Compile Include="VndbSharp\Models\Common\SimpleDate.cs" />
-    <Compile Include="VndbSharp\Models\Common\SpoilerLevel.cs" />
-    <Compile Include="VndbSharp\Models\Common\Status.cs" />
-    <Compile Include="VndbSharp\Models\DatabaseStats.cs" />
-    <Compile Include="VndbSharp\Models\Dumps\Tag.cs" />
-    <Compile Include="VndbSharp\Models\Dumps\TagCategory.cs" />
-    <Compile Include="VndbSharp\Models\Dumps\Trait.cs" />
-    <Compile Include="VndbSharp\Models\Dumps\Vote.cs" />
-    <Compile Include="VndbSharp\Models\Dumps\VoteDumpVersion.cs" />
-    <Compile Include="VndbSharp\Models\Errors\BadArgumentError.cs" />
-    <Compile Include="VndbSharp\Models\Errors\BadAuthenticationError.cs" />
-    <Compile Include="VndbSharp\Models\Errors\Error.cs" />
-    <Compile Include="VndbSharp\Models\Errors\ErrorType.cs" />
-    <Compile Include="VndbSharp\Models\Errors\GetInfoError.cs" />
-    <Compile Include="VndbSharp\Models\Errors\GetTypeError.cs" />
-    <Compile Include="VndbSharp\Models\Errors\InvalidFilterError.cs" />
-    <Compile Include="VndbSharp\Models\Errors\LibraryError.cs" />
-    <Compile Include="VndbSharp\Models\Errors\LoggedInError.cs" />
-    <Compile Include="VndbSharp\Models\Errors\LoginRequiredError.cs" />
-    <Compile Include="VndbSharp\Models\Errors\MissingError.cs" />
-    <Compile Include="VndbSharp\Models\Errors\ParseError.cs" />
-    <Compile Include="VndbSharp\Models\Errors\SetTypeError.cs" />
-    <Compile Include="VndbSharp\Models\Errors\ThrottledError.cs" />
-    <Compile Include="VndbSharp\Models\Errors\ThrottledType.cs" />
-    <Compile Include="VndbSharp\Models\FilterOperator.cs" />
-    <Compile Include="VndbSharp\Models\Login.cs" />
-    <Compile Include="VndbSharp\Models\Producer\Producer.cs" />
-    <Compile Include="VndbSharp\Models\Producer\ProducerLinks.cs" />
-    <Compile Include="VndbSharp\Models\Producer\Relationship.cs" />
-    <Compile Include="VndbSharp\Models\Release\Animated.cs" />
-    <Compile Include="VndbSharp\Models\Release\Media.cs" />
-    <Compile Include="VndbSharp\Models\Release\ProducerRelease.cs" />
-    <Compile Include="VndbSharp\Models\Release\Release.cs" />
-    <Compile Include="VndbSharp\Models\Release\ReleaseType.cs" />
-    <Compile Include="VndbSharp\Models\Release\VisualNovelMetadata.cs" />
-    <Compile Include="VndbSharp\Models\Release\Voiced.cs" />
-    <Compile Include="VndbSharp\Models\Staff\Staff.cs" />
-    <Compile Include="VndbSharp\Models\Staff\StaffAliases.cs" />
-    <Compile Include="VndbSharp\Models\Staff\StaffLinks.cs" />
-    <Compile Include="VndbSharp\Models\Staff\StaffVns.cs" />
-    <Compile Include="VndbSharp\Models\Staff\StaffVoiced.cs" />
-    <Compile Include="VndbSharp\Models\User\User.cs" />
-    <Compile Include="VndbSharp\Models\User\VisualNovelList.cs" />
-    <Compile Include="VndbSharp\Models\User\VoteList.cs" />
-    <Compile Include="VndbSharp\Models\User\Wishlist.cs" />
-    <Compile Include="VndbSharp\Models\VisualNovel\AnimeMetadata.cs" />
-    <Compile Include="VndbSharp\Models\VisualNovel\RelationType.cs" />
-    <Compile Include="VndbSharp\Models\VisualNovel\ScreenshotMetadata.cs" />
-    <Compile Include="VndbSharp\Models\VisualNovel\StaffMetadata.cs" />
-    <Compile Include="VndbSharp\Models\VisualNovel\TagMetadata.cs" />
-    <Compile Include="VndbSharp\Models\VisualNovel\VisualNovel.cs" />
-    <Compile Include="VndbSharp\Models\VisualNovel\VisualNovelLength.cs" />
-    <Compile Include="VndbSharp\Models\VisualNovel\VisualNovelLinks.cs" />
-    <Compile Include="VndbSharp\Models\VisualNovel\VisualNovelRelation.cs" />
-    <Compile Include="VndbSharp\Models\VndbFlags.cs" />
-    <Compile Include="VndbSharp\Models\VndbResponse.cs" />
-    <Compile Include="VndbSharp\UnexpectedResponseException.cs" />
-    <Compile Include="VndbSharp\Vndb.cs" />
-    <Compile Include="VndbSharp\Vndb.GetMethods.cs" />
-    <Compile Include="VndbSharp\Vndb.Helpers.cs" />
-    <Compile Include="VndbSharp\Vndb.SetMethods.cs" />
-    <Compile Include="VndbSharp\VndbFilters.cs" />
-    <Compile Include="VndbSharp\VndbUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
