@@ -9,7 +9,6 @@ using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
 using VndbSharp;
 using VndbSharp.Models;
-using VndbSharp.Models.Common;
 using VndbSharp.Models.Release;
 using VndbSharp.Models.VisualNovel;
 
@@ -39,6 +38,7 @@ namespace PlayniteVndbExtension
             _playniteApi = plugin.PlayniteApi;
             _vndbClient = plugin.VndbClient;
             _settings = plugin.LoadPluginSettings<VndbMetadataSettings>();
+            VndbMetadataSettings.MigrateSettingsVersion(_settings, plugin);
             _descriptionFormatter = descriptionFormatter;
         }
 
@@ -62,11 +62,11 @@ namespace PlayniteVndbExtension
 
             if (!string.IsNullOrEmpty(_vnData.Description)) fields.Add(MetadataField.Description);
 
-            if (_vnData.Image != null && (!(_vnData.ImageRating.SexualAvg >= 0.5 || _vnData.ImageRating.ViolenceAvg >= 0.5) || _settings.AllowNsfwImages))
+            if (_vnData.Image != null && IsImageAllowed(_vnData))
                 fields.Add(MetadataField.CoverImage);
 
             if (_vnData.Screenshots.HasItems() &&
-                _vnData.Screenshots.Any(image => !(image.ImageRating.SexualAvg >= 0.5 || image.ImageRating.ViolenceAvg >= 0.5) || _settings.AllowNsfwImages))
+                _vnData.Screenshots.Any(IsImageAllowed))
                 fields.Add(MetadataField.BackgroundImage);
 
             if (_vnData.Released != null && _vnData.Released.Year != null 
@@ -88,6 +88,20 @@ namespace PlayniteVndbExtension
                 fields.Add(MetadataField.Publishers);
 
             return fields;
+        }
+
+        private bool IsImageAllowed(VisualNovel vn)
+        {
+            Logger.Debug("Cover Image Sexuality Rating: " + vn.ImageRating.SexualAvg);
+            Logger.Debug("Cover Image Violence Rating: " + vn.ImageRating.ViolenceAvg);
+            return !(vn.ImageRating.SexualAvg >= (int)_settings.ImageMaxSexualityLevel + 0.5 || 
+                     vn.ImageRating.ViolenceAvg >= (int)_settings.ImageMaxViolenceLevel + 0.5);
+        }
+        
+        private bool IsImageAllowed(ScreenshotMetadata screenshot)
+        {
+            return !(screenshot.ImageRating.SexualAvg >= (int)_settings.ImageMaxSexualityLevel + 0.5 ||
+                     screenshot.ImageRating.ViolenceAvg >= (int)_settings.ImageMaxViolenceLevel + 0.5);
         }
 
         private bool HasViableTags()
@@ -278,9 +292,9 @@ namespace PlayniteVndbExtension
                 case VndbSharp.Models.Common.SpoilerLevel.None:
                     return true;
                 case VndbSharp.Models.Common.SpoilerLevel.Minor:
-                    return !_settings.TagMaxSpoilerLevel.Equals(PlayniteVndbExtension.SpoilerLevel.None);
+                    return !_settings.TagMaxSpoilerLevel.Equals(SpoilerLevel.None);
                 case VndbSharp.Models.Common.SpoilerLevel.Major:
-                    return _settings.TagMaxSpoilerLevel.Equals(PlayniteVndbExtension.SpoilerLevel.Major);
+                    return _settings.TagMaxSpoilerLevel.Equals(SpoilerLevel.Major);
                 default:
                     return false;
             }
@@ -305,7 +319,7 @@ namespace PlayniteVndbExtension
         public override MetadataFile GetCoverImage()
         {
             if (AvailableFields.Contains(MetadataField.CoverImage) && _vnData != null)
-                if (!(_vnData.ImageRating.SexualAvg >= 0.5 || _vnData.ImageRating.ViolenceAvg >= 0.5) || _settings.AllowNsfwImages)
+                if (IsImageAllowed(_vnData))
                     return new MetadataFile(_vnData.Image);
 
 
@@ -317,7 +331,7 @@ namespace PlayniteVndbExtension
             if (AvailableFields.Contains(MetadataField.BackgroundImage) && _vnData != null)
             {
                 var selection = (from screenshot in _vnData.Screenshots
-                    where !(screenshot.ImageRating.SexualAvg >= 0.5 || screenshot.ImageRating.ViolenceAvg >= 0.5) || _settings.AllowNsfwImages
+                    where IsImageAllowed(screenshot)
                     select new ImageFileOption(screenshot.Url)).ToList();
 
                 var background = _playniteApi.Dialogs.ChooseImageFile(selection, "Screenshots");

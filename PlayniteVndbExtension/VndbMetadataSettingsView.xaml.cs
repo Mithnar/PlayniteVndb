@@ -7,11 +7,4 @@
             InitializeComponent();
         }
     }
-
-    public enum SpoilerLevel
-    {
-        None,
-        Minor,
-        Major
-    }
 }

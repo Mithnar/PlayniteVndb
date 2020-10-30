@@ -5,9 +5,19 @@
              xmlns:pro="clr-namespace:PlayniteVndbExtension">
 
     <UserControl.Resources>
-        <ObjectDataProvider x:Key="GetDataFromEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider x:Key="GetSpoilerLevelsFromEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="pro:SpoilerLevel" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="GetViolenceLevelsFromEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="pro:ViolenceLevel" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="GetSexualityLevelsFromEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="pro:SexualityLevel" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </UserControl.Resources>
@@ -15,8 +25,16 @@
     <StackPanel>
         <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="Images:" />
         <StackPanel Orientation="Horizontal" Margin="10">
-            <TextBlock Text="Allow NSFW: " />
-            <CheckBox IsChecked="{Binding AllowNsfwImages}" />
+            <StackPanel Margin="5">
+                <TextBlock Text="Maximum Violence Level" HorizontalAlignment="Center" />
+                <ComboBox SelectedValue="{Binding ImageMaxViolenceLevel}" MinWidth="100"
+                          ItemsSource="{Binding Source={StaticResource GetViolenceLevelsFromEnum}}" />
+            </StackPanel>
+            <StackPanel Margin="5">
+                <TextBlock Text="Maximum Sexuality Level" HorizontalAlignment="Center" />
+                <ComboBox SelectedValue="{Binding ImageMaxSexualityLevel}" MinWidth="100"
+                          ItemsSource="{Binding Source={StaticResource GetSexualityLevelsFromEnum}}" />
+            </StackPanel>
         </StackPanel>
         <Separator />
         <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="Tags:" />
@@ -43,7 +61,7 @@
             <StackPanel Margin="5">
                 <TextBlock Text="Spoiler Level" HorizontalAlignment="Center" />
                 <ComboBox SelectedValue="{Binding TagMaxSpoilerLevel}" MinWidth="100"
-                          ItemsSource="{Binding Source={StaticResource GetDataFromEnum}}" />
+                          ItemsSource="{Binding Source={StaticResource GetSpoilerLevelsFromEnum}}" />
             </StackPanel>
         </StackPanel>
         <Separator />
