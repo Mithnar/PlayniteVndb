@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Media;
-using Newtonsoft.Json;
 using Playnite.SDK;
-using VndbSharp.Models.Errors;
 
 namespace PlayniteVndbExtension
 {
@@ -51,6 +47,8 @@ namespace PlayniteVndbExtension
         public float TagMinScore { get; set; } = 1;
         public bool AllowIncompleteDates { get; set; } = false;
 
+        public DateTime? LastTagUpdate { get; set; }
+        
         public VndbMetadataSettings()
         {
         }
@@ -157,7 +155,7 @@ namespace PlayniteVndbExtension
             return true;
         }
         
-        //Old Configuration Values
+        //Deprecated Configuration Values kept for configuration migration
         
         [ObsoleteAttribute("This property is obsolete. Use MaxContentTags and ImageMaxSexualityLevel instead.", false)]
         public bool? AllowNsfwImages { get; set; }

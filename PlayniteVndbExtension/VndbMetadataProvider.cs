@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using Playnite.SDK;
 using Playnite.SDK.Metadata;
@@ -17,6 +20,7 @@ namespace PlayniteVndbExtension
     public class VndbMetadataProvider : OnDemandMetadataProvider
     {
         private static readonly ILogger Logger = LogManager.GetLogger();
+        
         private readonly DescriptionFormatter _descriptionFormatter;
 
         private readonly MetadataRequestOptions _options;
@@ -24,6 +28,7 @@ namespace PlayniteVndbExtension
         private readonly VndbMetadataSettings _settings;
         private readonly List<TagName> _tagDetails;
         private readonly Vndb _vndbClient;
+        private readonly string _pluginUserDataPath;
 
         private List<MetadataField> _availableFields;
 
@@ -37,6 +42,7 @@ namespace PlayniteVndbExtension
             _tagDetails = tagDetails;
             _playniteApi = plugin.PlayniteApi;
             _vndbClient = plugin.VndbClient;
+            _pluginUserDataPath = plugin.GetPluginUserDataPath(); 
             _settings = plugin.LoadPluginSettings<VndbMetadataSettings>();
             VndbMetadataSettings.MigrateSettingsVersion(_settings, plugin);
             _descriptionFormatter = descriptionFormatter;
@@ -92,8 +98,6 @@ namespace PlayniteVndbExtension
 
         private bool IsImageAllowed(VisualNovel vn)
         {
-            Logger.Debug("Cover Image Sexuality Rating: " + vn.ImageRating.SexualAvg);
-            Logger.Debug("Cover Image Violence Rating: " + vn.ImageRating.ViolenceAvg);
             return !(vn.ImageRating.SexualAvg >= (int)_settings.ImageMaxSexualityLevel + 0.5 || 
                      vn.ImageRating.ViolenceAvg >= (int)_settings.ImageMaxViolenceLevel + 0.5);
         }

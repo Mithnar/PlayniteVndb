@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
+using System.Net;
 using System.Windows.Controls;
 using Newtonsoft.Json;
 using Playnite.SDK;
@@ -14,27 +16,56 @@ namespace PlayniteVndbExtension
     {
         private const string Guid = "1da026f7-442d-4d13-a547-13c02a07de50";
 
+        private static readonly ILogger Logger = LogManager.GetLogger();
+
         private readonly DescriptionFormatter _descriptionFormatter;
 
         private readonly List<TagName> _tagNames;
 
         public VndbMetadataPlugin(IPlayniteAPI playniteApi) : base(playniteApi)
         {
-            var jsonString = File.ReadAllText
-            (
-                playniteApi.Paths.ExtensionsDataPath +
-                Path.DirectorySeparatorChar +
-                Guid +
-                Path.DirectorySeparatorChar +
-                "tag_dump.json"
-            );
+            var settings = CreateSettingsIfNotExists();
+            var tagDumpPath = DownloadTagDump(settings);
+            var jsonString = File.ReadAllText(tagDumpPath);
             _tagNames = JsonConvert.DeserializeObject<List<TagName>>(jsonString);
             VndbClient = new Vndb(true)
                 .WithClientDetails("PlayniteVndbExtension", "1.1.1")
                 .WithFlagsCheck(true, HandleInvalidFlags)
                 .WithTimeout(10000);
             _descriptionFormatter = new DescriptionFormatter();
-            CreateSettingsIfNotExists();
+        }
+        
+        private string DownloadTagDump(VndbMetadataSettings settings)
+        {
+            var tagDumpFile = $"{GetPluginUserDataPath()}/tag_dump.json";
+            if (!File.Exists(tagDumpFile) || !settings.LastTagUpdate.HasValue || DateTime.Now.Subtract(settings.LastTagUpdate.Value).Days > 21)
+            {
+                var archiveDownloadPath = $"{GetPluginUserDataPath()}/tagdump.json.gz";
+
+                Logger.Debug("Downloading new Tag Dump");
+                using (var webClient = new WebClient())
+                {
+                    webClient.DownloadFile("https://dl.vndb.org/dump/vndb-tags-latest.json.gz", archiveDownloadPath);
+                }
+                
+                
+                if (File.Exists(tagDumpFile))
+                {
+                    File.Delete(tagDumpFile);
+                }
+                
+                using (var input = File.OpenRead(archiveDownloadPath))
+                using (var output = File.OpenWrite(tagDumpFile))
+                using (var gz = new GZipStream(input, CompressionMode.Decompress))
+                {
+                    gz.CopyTo(output);
+                }
+                settings.LastTagUpdate = DateTime.Now;
+                SavePluginSettings(settings);
+                File.Delete(archiveDownloadPath);
+            }
+
+            return tagDumpFile;
         }
 
         public Vndb VndbClient { get; }
@@ -58,7 +89,7 @@ namespace PlayniteVndbExtension
             MetadataField.CommunityScore
         };
 
-        private void CreateSettingsIfNotExists()
+        private VndbMetadataSettings CreateSettingsIfNotExists()
         {
             var settings = LoadPluginSettings<VndbMetadataSettings>();
             if (settings == null)
@@ -66,6 +97,8 @@ namespace PlayniteVndbExtension
                 settings = new VndbMetadataSettings();
                 SavePluginSettings(settings);
             }
+
+            return settings;
         }
 
         private static void HandleInvalidFlags(string method, VndbFlags provided, VndbFlags invalid)
