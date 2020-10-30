@@ -40,16 +40,22 @@
         <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="Tags:" />
         <StackPanel Orientation="Horizontal" Margin="5">
             <StackPanel Margin="5">
-                <TextBlock Text="Allow Content Tags" />
-                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding TagEnableContent}" />
+                <TextBlock Text="Max Tags" TextAlignment="Center" MinWidth="320"/>
+                <TextBox HorizontalAlignment="Center" Text="{Binding MaxAllTags}" MinWidth="30"></TextBox>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="5">
+            <StackPanel Margin="5">
+                <TextBlock Text="Max Content Tags" TextAlignment="Center" MinWidth="100"/>
+                <TextBox HorizontalAlignment="Center" Text="{Binding MaxContentTags}" MinWidth="30"></TextBox>
             </StackPanel>
             <StackPanel Margin="5">
-                <TextBlock Text="Allow Sexual Tags" />
-                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding TagEnableSexual}" />
+                <TextBlock Text="Max Sexual Tags" TextAlignment="Center" MinWidth="100" />
+                <TextBox HorizontalAlignment="Center" Text="{Binding MaxSexualTags}" MinWidth="30"></TextBox>
             </StackPanel>
             <StackPanel Margin="5">
-                <TextBlock Text="Allow Technical Tags" />
-                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding TagEnableTechnical}" />
+                <TextBlock Text="Max Technical Tags" TextAlignment="Center" MinWidth="100" />
+                <TextBox HorizontalAlignment="Center" Text="{Binding MaxTechnicalTags}" MinWidth="30"></TextBox>
             </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="5">

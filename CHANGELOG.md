@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Issue #13](https://github.com/Mithnar/PlayniteVndb/issues/13) Enable searching for a vndb entry by id (syntax: id:v2002)
 ### Changed
 - [Issue #14](https://github.com/Mithnar/PlayniteVndb/issues/14) Adjust handling of nsfw images to changes in vndb api
+- [Issue #15](https://github.com/Mithnar/PlayniteVndb/issues/15) It's now possible to set a limit to tags by category and overall
 ### Fixed
 - [Issue #12](https://github.com/Mithnar/PlayniteVndb/issues/12) Selecting a VN when multiple VNs with the same name exist should now return the selected VN
 

@@ -247,31 +247,78 @@ namespace PlayniteVndbExtension
         {
             if (AvailableFields.Contains(MetadataField.Tags) && _vnData != null)
             {
-                var tags = _vnData.Tags.Select(MapTagToNamedTuple)
-                    .Where(tag =>
+                var tags = new List<string>();
+                var contentTags = 0;
+                var sexualTags = 0;
+                var technicalTags = 0;
+                foreach (var (tagMetadata, tagName) in _vnData.Tags.OrderByDescending(tag => tag.Score).Select(MapTagToNamedTuple))
+                {
+                    if (tagName == null)
                     {
-                        var (tagMetadata, tagDetails) = tag;
-                        if (TagIsAvailableForScoreAndSpoiler(tagMetadata))
+                        Logger.Warn("VndbMetadataProvider: Could not find tag: " + tagMetadata.Id);
+                    } else if (TagIsAvailableForScoreAndSpoiler(tagMetadata) && 
+                               TagIsInEnabledCategory(tagName) && 
+                               tags.Count < _settings.MaxAllTags) 
+                    {
+                        if (tagName.Cat.Equals("cont"))
                         {
-                            if (tagDetails != null) return TagIsInEnabledCategory(tagDetails);
-
-                            Logger.Warn("VndbMetadataProvider: Could not find tag: " + tagMetadata.Id);
-                            return false;
+                            contentTags = AddContentTagIfNotMax(contentTags, tags, tagName);
+                        } else if (tagName.Cat.Equals("ero"))
+                        {
+                            sexualTags = AddSexualTagIfNotMax(sexualTags, tags, tagName);
+                        } else if (tagName.Cat.Equals("tech"))
+                        {
+                            technicalTags = AddTechnicalTagIfNotMax(technicalTags, tags, tagName);
                         }
-
-                        return false;
-                    }).Select(tag => tag.Item2.Name).DefaultIfEmpty().ToList();
-                if (tags.HasNonEmptyItems()) return tags;
+                    }
+                }
+                if (tags.HasNonEmptyItems())
+                {
+                    return tags;
+                }
             }
 
             return base.GetTags();
         }
 
+        private int AddTechnicalTagIfNotMax(int technicalTags, List<string> tags, TagName tagName)
+        {
+            if (technicalTags < _settings.MaxTechnicalTags)
+            {
+                ++technicalTags;
+                tags.Add(tagName.Name);
+            }
+
+            return technicalTags;
+        }
+
+        private int AddSexualTagIfNotMax(int sexualTags, List<string> tags, TagName tagName)
+        {
+            if (sexualTags < _settings.MaxSexualTags)
+            {
+                ++sexualTags;
+                tags.Add(tagName.Name);
+            }
+
+            return sexualTags;
+        }
+
+        private int AddContentTagIfNotMax(int contentTags, List<string> tags, TagName tagName)
+        {
+            if (contentTags < _settings.MaxContentTags)
+            {
+                ++contentTags;
+                tags.Add(tagName.Name);
+            }
+
+            return contentTags;
+        }
+
         private bool TagIsInEnabledCategory(TagName tagInfo)
         {
-            return tagInfo.Cat.Equals("cont") && _settings.TagEnableContent ||
-                   tagInfo.Cat.Equals("ero") && _settings.TagEnableSexual ||
-                   tagInfo.Cat.Equals("tech") && _settings.TagEnableTechnical;
+            return tagInfo.Cat.Equals("cont") && _settings.MaxContentTags > 0 ||
+                   tagInfo.Cat.Equals("ero") && _settings.MaxSexualTags > 0 ||
+                   tagInfo.Cat.Equals("tech") && _settings.MaxTechnicalTags > 0;
         }
 
         private (TagMetadata, TagName) MapTagToNamedTuple(TagMetadata tag)

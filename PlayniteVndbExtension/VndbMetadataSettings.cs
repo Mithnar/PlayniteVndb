@@ -37,12 +37,17 @@ namespace PlayniteVndbExtension
         public const int CurrentVersion = 2;
 
         public int Version { get; set; }
-        public bool TagEnableContent { get; set; } = true;
-        public bool TagEnableSexual { get; set; } = false;
-        public bool TagEnableTechnical { get; set; } = true;
+
         public SpoilerLevel TagMaxSpoilerLevel { get; set; } = SpoilerLevel.Minor;
         public ViolenceLevel ImageMaxViolenceLevel { get; set; } = ViolenceLevel.Tame;
         public SexualityLevel ImageMaxSexualityLevel { get; set; } = SexualityLevel.Safe;
+
+        public uint MaxContentTags { get; set; } = 8;
+        public uint MaxSexualTags { get; set; } = 0;
+        public uint MaxTechnicalTags { get; set; } = 8;
+        public uint MaxAllTags { get; set; } = 15;
+        
+        
         public float TagMinScore { get; set; } = 1;
         public bool AllowIncompleteDates { get; set; } = false;
 
@@ -63,9 +68,10 @@ namespace PlayniteVndbExtension
             }
             ImageMaxViolenceLevel = savedSettings.ImageMaxViolenceLevel;
             ImageMaxSexualityLevel = savedSettings.ImageMaxSexualityLevel;
-            TagEnableContent = savedSettings.TagEnableContent;
-            TagEnableSexual = savedSettings.TagEnableSexual;
-            TagEnableTechnical = savedSettings.TagEnableTechnical;
+            MaxContentTags = savedSettings.MaxContentTags;
+            MaxSexualTags = savedSettings.MaxSexualTags;
+            MaxTechnicalTags = savedSettings.MaxTechnicalTags;
+            MaxAllTags = savedSettings.MaxAllTags;
             TagMaxSpoilerLevel = savedSettings.TagMaxSpoilerLevel;
             TagMinScore = savedSettings.TagMinScore;
             AllowIncompleteDates = savedSettings.AllowIncompleteDates;
@@ -107,6 +113,24 @@ namespace PlayniteVndbExtension
                     savedSettings.ImageMaxSexualityLevel = SexualityLevel.Safe;
                     savedSettings.ImageMaxViolenceLevel = ViolenceLevel.Tame;
                 }
+                
+                if (savedSettings.TagEnableContent.HasValue && savedSettings.TagEnableContent.Value)
+                {
+                    savedSettings.MaxContentTags = 8;
+                }
+                if (savedSettings.TagEnableSexual.HasValue && savedSettings.TagEnableSexual.Value)
+                {
+                    savedSettings.MaxSexualTags = 8;
+                }
+                if (savedSettings.TagEnableTechnical.HasValue && savedSettings.TagEnableTechnical.Value)
+                {
+                    savedSettings.MaxTechnicalTags = 8;
+                }
+
+                savedSettings.TagEnableContent = null;
+                savedSettings.TagEnableSexual = null;
+                savedSettings.TagEnableTechnical = null;
+                savedSettings.MaxAllTags = 15;
 
                 savedSettings.AllowNsfwImages = null;
                 savedSettings.Version = 2;
@@ -135,10 +159,30 @@ namespace PlayniteVndbExtension
         
         //Old Configuration Values
         
-        [ObsoleteAttribute("This property is obsolete. Use ImageMaxViolenceLevel and ImageMaxSexualityLevel instead.", false)]
+        [ObsoleteAttribute("This property is obsolete. Use MaxContentTags and ImageMaxSexualityLevel instead.", false)]
         public bool? AllowNsfwImages { get; set; }
-        
         public bool ShouldSerializeAllowNsfwImages()
+        {
+            return false;
+        }
+        
+        [ObsoleteAttribute("This property is obsolete. Use MaxContentTags instead.", false)]
+        public bool? TagEnableContent { get; set; }
+        public bool ShouldSerializeTagEnableContent()
+        {
+            return false;
+        }
+        
+        [ObsoleteAttribute("This property is obsolete. Use MaxSexualTags instead.", false)]
+        public bool? TagEnableSexual { get; set; }
+        public bool ShouldSerializeTagEnableSexual()
+        {
+            return false;
+        }
+        
+        [ObsoleteAttribute("This property is obsolete. Use MaxTechnicalTags instead.", false)]
+        public bool? TagEnableTechnical { get; set; }
+        public bool ShouldSerializeTagEnableTechnical()
         {
             return false;
         }
