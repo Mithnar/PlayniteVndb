@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Playnite.SDK;
 using Playnite.SDK.Metadata;
 using Playnite.SDK.Models;
@@ -118,9 +119,18 @@ namespace PlayniteVndbExtension
             ReadOnlyCollection<VisualNovel> results = new ReadOnlyCollection<VisualNovel>(new List<VisualNovel>());
             var item = _playniteApi.Dialogs.ChooseItemWithSearch(null, searchString =>
             {
-                var search = _vndbClient
-                    .GetVisualNovelAsync(VndbFilters.Search.Fuzzy(searchString), VndbFlags.FullVisualNovel).Result
-                    .Items;
+                ReadOnlyCollection<VisualNovel> search;
+                if (isVndbId(searchString))
+                {
+                    search = _vndbClient.GetVisualNovelAsync(VndbFilters.Id.Equals(retrieveVndbId(searchString)), VndbFlags.FullVisualNovel).Result
+                        .Items;
+                }
+                else
+                {
+                    search = _vndbClient
+                        .GetVisualNovelAsync(VndbFilters.Search.Fuzzy(searchString), VndbFlags.FullVisualNovel).Result
+                        .Items;
+                }
                 results = search;
                 return search.Select(vn =>
                     {
@@ -143,6 +153,17 @@ namespace PlayniteVndbExtension
 
             _vnData = null;
             return false;
+        }
+
+        private bool isVndbId(string searchString)
+        {
+            var onlyNumbersMatcher = new Regex("^[\\d]+$");
+            return searchString.ToLower().StartsWith("id:v") && onlyNumbersMatcher.IsMatch(searchString.Substring(4));
+        }
+
+        private uint retrieveVndbId(string searchString)
+        {
+            return uint.Parse(searchString.Substring(4));
         }
 
         public override string GetName()

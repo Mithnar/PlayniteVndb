@@ -30,7 +30,7 @@ namespace PlayniteVndbExtension
             );
             _tagNames = JsonConvert.DeserializeObject<List<TagName>>(jsonString);
             VndbClient = new Vndb(true)
-                .WithClientDetails("PlayniteVndbExtension", "0.1")
+                .WithClientDetails("PlayniteVndbExtension", "1.1.1")
                 .WithFlagsCheck(true, HandleInvalidFlags)
                 .WithTimeout(10000);
             _descriptionFormatter = new DescriptionFormatter();
