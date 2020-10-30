@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - [Issue #13](https://github.com/Mithnar/PlayniteVndb/issues/13) Enable searching for a vndb entry by id (syntax: id:v2002)
+### Fixed
+- [Issue #12](https://github.com/Mithnar/PlayniteVndb/issues/12) Selecting a VN when multiple VNs with the same name exist should now return the selected VN
 
 ## [1.1.1] - 2020-10-27
 ### Changed

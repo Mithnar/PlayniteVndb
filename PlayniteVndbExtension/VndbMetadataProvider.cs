@@ -117,12 +117,13 @@ namespace PlayniteVndbExtension
             
             if (_options.IsBackgroundDownload) return false;
             ReadOnlyCollection<VisualNovel> results = new ReadOnlyCollection<VisualNovel>(new List<VisualNovel>());
-            var item = _playniteApi.Dialogs.ChooseItemWithSearch(null, searchString =>
+            VndbItemOption item = (VndbItemOption) _playniteApi.Dialogs.ChooseItemWithSearch(null, searchString =>
             {
                 ReadOnlyCollection<VisualNovel> search;
                 if (isVndbId(searchString))
                 {
-                    search = _vndbClient.GetVisualNovelAsync(VndbFilters.Id.Equals(retrieveVndbId(searchString)), VndbFlags.FullVisualNovel).Result
+                    search = _vndbClient.GetVisualNovelAsync(VndbFilters.Id.Equals(retrieveVndbId(searchString)),
+                            VndbFlags.FullVisualNovel).Result
                         .Items;
                 }
                 else
@@ -131,17 +132,18 @@ namespace PlayniteVndbExtension
                         .GetVisualNovelAsync(VndbFilters.Search.Fuzzy(searchString), VndbFlags.FullVisualNovel).Result
                         .Items;
                 }
+
                 results = search;
-                return search.Select(vn =>
+                return new List<GenericItemOption>(search.Select(vn =>
                     {
-                        return new GenericItemOption(vn.Name, _descriptionFormatter.RemoveTags(vn.Description));
+                        return new VndbItemOption(vn.Name, _descriptionFormatter.RemoveTags(vn.Description), vn.Id);
                     })
-                    .ToList();
+                    .ToList());
             }, _options.GameData.Name);
 
-            if (item != null && results.Any(vn => vn.Name.Equals(item.Name)))
+            if (item != null && results.Any(vn => vn.Id.Equals(item.Id)))
             {
-                _vnData = results.First(vn => vn.Name.Equals(item.Name));
+                _vnData = results.First(vn => vn.Id.Equals(item.Id));
                 _vnProducers = _vndbClient
                     .GetReleaseAsync(VndbFilters.VisualNovel.Equals(_vnData.Id), VndbFlags.Producers)
                     .Result
