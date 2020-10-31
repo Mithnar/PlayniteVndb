@@ -126,7 +126,7 @@ namespace PlayniteVndbExtension
 
         private bool TagIsAvailableForScoreAndSpoiler(TagMetadata tag)
         {
-            return tag.Score >= _settings.TagMinScore && LowerSpoilerLevel(tag);
+            return Math.Round(tag.Score, 1) >= _settings.TagMinScore && LowerSpoilerLevel(tag);
         }
 
         private bool GetVndbMetadata()
