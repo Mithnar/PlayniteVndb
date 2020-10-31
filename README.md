@@ -7,8 +7,16 @@ https://vndb.org/
 
 ## Installation
 
+### .pext
+- Download the pext extension: https://github.com/Mithnar/PlayniteVndb/releases
+- Drag and Drop the pext file onto your Playnite application
+- Accept the installion and restart Playnite
+- Configure the extension to your needs (Settings../Metadata Sources/VNDB)
+- You can now use "Download Metadata" under "Edit Game Details" to use VNDB as a metadata source
+
+### .zip
 - Download the zipped extension: https://github.com/Mithnar/PlayniteVndb/releases
-- Unzip and drop the "Extensions" and "ExtensionsData" folders into your Playnite directory
+- Unzip and drop the "Extensions" folders into your Playnite directory
 - Configure the extension to your needs (Settings../Metadata Sources/VNDB)
 - You can now use "Download Metadata" under "Edit Game Details" to use VNDB as a metadata source
 
@@ -22,19 +30,15 @@ For the detailed release history, head over to the [Changelog](https://github.co
 
 
 ### Recent Releases:
-#### [1.1.1](https://github.com/Mithnar/PlayniteVndb/releases/tag/1.1.1)
-##### Changed
-- [Issue #10](https://github.com/Mithnar/PlayniteVndb/issues/10) Use VndbSharp Nuget Package
-##### Fixed
-- [Issue #11](https://github.com/Mithnar/PlayniteVndb/issues/11) Added Id property to manifest for automatic installation
-
-#### [1.1](https://github.com/Mithnar/PlayniteVndb/releases/tag/1.1)
+#### [1.2](https://github.com/Mithnar/PlayniteVndb/releases/tag/1.2)
 ##### Added
-- [Playnite #10](https://playnite.link/forum/thread-24-post-67.html#pid67) Add option to enable incomplete dates
+- [Issue #13](https://github.com/Mithnar/PlayniteVndb/issues/13) Enable searching for a vndb entry by id (syntax: id:v2002)
+- [Issue #16](https://github.com/Mithnar/PlayniteVndb/issues/16) Tag Dumps are now downloaded on start up if not present or outdated
 ##### Changed
-- [Playnite #2](https://playnite.link/forum/thread-24-post-48.html#pid48) Game description in game selection will no longer show any url tags
+- [Issue #14](https://github.com/Mithnar/PlayniteVndb/issues/14) Adjust handling of nsfw images to changes in vndb api
+- [Issue #15](https://github.com/Mithnar/PlayniteVndb/issues/15) It's now possible to set a limit to tags by category and overall
 ##### Fixed
-- Fix error when cancelling game selection
+- [Issue #12](https://github.com/Mithnar/PlayniteVndb/issues/12) Selecting a VN when multiple VNs with the same name exist should now return the selected VN
 
 ## Credits
 https://github.com/KuroThing
