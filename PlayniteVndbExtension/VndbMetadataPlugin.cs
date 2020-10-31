@@ -21,24 +21,26 @@ namespace PlayniteVndbExtension
         private readonly DescriptionFormatter _descriptionFormatter;
 
         private readonly List<TagName> _tagNames;
+        
+        private VndbMetadataSettings _settings;
 
         public VndbMetadataPlugin(IPlayniteAPI playniteApi) : base(playniteApi)
         {
-            var settings = CreateSettingsIfNotExists();
-            var tagDumpPath = DownloadTagDump(settings);
+            var tagDumpPath = DownloadTagDump(false);
             var jsonString = File.ReadAllText(tagDumpPath);
             _tagNames = JsonConvert.DeserializeObject<List<TagName>>(jsonString);
             VndbClient = new Vndb(true)
-                .WithClientDetails("PlayniteVndbExtension", "1.1.1")
+                .WithClientDetails("PlayniteVndbExtension", "1.2")
                 .WithFlagsCheck(true, HandleInvalidFlags)
                 .WithTimeout(10000);
             _descriptionFormatter = new DescriptionFormatter();
         }
         
-        private string DownloadTagDump(VndbMetadataSettings settings)
+        public string DownloadTagDump(bool forceDownload)
         {
+            _settings = CreateSettingsIfNotExists();
             var tagDumpFile = $"{GetPluginUserDataPath()}/tag_dump.json";
-            if (!File.Exists(tagDumpFile) || !settings.LastTagUpdate.HasValue || DateTime.Now.Subtract(settings.LastTagUpdate.Value).Days > 21)
+            if (forceDownload || !File.Exists(tagDumpFile) || DateTime.Now.Subtract(_settings.LastTagUpdate).Days > 7)
             {
                 var archiveDownloadPath = $"{GetPluginUserDataPath()}/tagdump.json.gz";
 
@@ -47,8 +49,7 @@ namespace PlayniteVndbExtension
                 {
                     webClient.DownloadFile("https://dl.vndb.org/dump/vndb-tags-latest.json.gz", archiveDownloadPath);
                 }
-                
-                
+
                 if (File.Exists(tagDumpFile))
                 {
                     File.Delete(tagDumpFile);
@@ -60,8 +61,8 @@ namespace PlayniteVndbExtension
                 {
                     gz.CopyTo(output);
                 }
-                settings.LastTagUpdate = DateTime.Now;
-                SavePluginSettings(settings);
+                _settings.LastTagUpdate = DateTime.Now;
+                SavePluginSettings(_settings);
                 File.Delete(archiveDownloadPath);
             }
 

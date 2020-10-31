@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - [Issue #13](https://github.com/Mithnar/PlayniteVndb/issues/13) Enable searching for a vndb entry by id (syntax: id:v2002)
+- [Issue #16](https://github.com/Mithnar/PlayniteVndb/issues/16) Tag Dumps are now downloaded on start up if not present or outdated
 ### Changed
 - [Issue #14](https://github.com/Mithnar/PlayniteVndb/issues/14) Adjust handling of nsfw images to changes in vndb api
 - [Issue #15](https://github.com/Mithnar/PlayniteVndb/issues/15) It's now possible to set a limit to tags by category and overall

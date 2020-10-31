@@ -70,6 +70,10 @@
                           ItemsSource="{Binding Source={StaticResource GetSpoilerLevelsFromEnum}}" />
             </StackPanel>
         </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="5">
+            <TextBlock Text="Tags last Update on " />
+            <TextBlock x:Name="TagDateField" Text="{Binding LastTagUpdate }" MinWidth="100" />
+        </StackPanel>
         <Separator />
         <StackPanel>
             <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="Dates:" />

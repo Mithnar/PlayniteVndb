@@ -47,7 +47,7 @@ namespace PlayniteVndbExtension
         public float TagMinScore { get; set; } = 1;
         public bool AllowIncompleteDates { get; set; } = false;
 
-        public DateTime? LastTagUpdate { get; set; }
+        public DateTime LastTagUpdate { get; set; }
         
         public VndbMetadataSettings()
         {
@@ -58,7 +58,6 @@ namespace PlayniteVndbExtension
             
             _plugin = plugin;
             var savedSettings = plugin.LoadPluginSettings<VndbMetadataSettings>();
-            Logger.Debug("After Load Settings");
             if (savedSettings == null) return;
             if (savedSettings.Version != CurrentVersion)
             {
@@ -73,6 +72,7 @@ namespace PlayniteVndbExtension
             TagMaxSpoilerLevel = savedSettings.TagMaxSpoilerLevel;
             TagMinScore = savedSettings.TagMinScore;
             AllowIncompleteDates = savedSettings.AllowIncompleteDates;
+            LastTagUpdate = savedSettings.LastTagUpdate;
             Version = savedSettings.Version;
         }
 
