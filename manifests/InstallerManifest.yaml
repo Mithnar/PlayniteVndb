@@ -1,0 +1,8 @@
+AddonId: VNDBMetadata
+Packages:
+  - Version: 1.3
+    RequiredApiVersion: 6.1.0
+    ReleaseDate: 2021-10-20
+    PackageUrl: https://github.com/Mithnar/PlayniteVndb/releases/download/1.3/VNDBMetadata_1_3.pext
+    Changelog:
+      - Playnite 9 support
