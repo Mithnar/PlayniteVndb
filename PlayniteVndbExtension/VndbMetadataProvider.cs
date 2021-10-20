@@ -7,7 +7,6 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using Playnite.SDK;
-using Playnite.SDK.Metadata;
 using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
 using VndbSharp;
@@ -64,7 +63,12 @@ namespace PlayniteVndbExtension
                 if (!GetVndbMetadata())
                     return new List<MetadataField>();
 
-            var fields = new List<MetadataField> {MetadataField.Name};
+            var fields = new List<MetadataField>
+            {
+                MetadataField.Name,
+                MetadataField.Genres,
+                MetadataField.Links
+            };
 
             if (!string.IsNullOrEmpty(_vnData.Description)) fields.Add(MetadataField.Description);
 
@@ -75,13 +79,8 @@ namespace PlayniteVndbExtension
                 _vnData.Screenshots.Any(IsImageAllowed))
                 fields.Add(MetadataField.BackgroundImage);
 
-            if (_vnData.Released != null && _vnData.Released.Year != null 
-                                         && ((_vnData.Released.Month != null && _vnData.Released.Day != null) 
-                                             || _settings.AllowIncompleteDates) )
+            if (_vnData.Released != null && _vnData.Released.Year != null)
                 fields.Add(MetadataField.ReleaseDate);
-
-            fields.Add(MetadataField.Genres);
-            fields.Add(MetadataField.Links);
 
             if (HasViableTags()) fields.Add(MetadataField.Tags);
 
@@ -90,7 +89,7 @@ namespace PlayniteVndbExtension
             if (_vnProducers != null && _vnProducers.Count(p => p.IsDeveloper) > 0)
                 fields.Add(MetadataField.Developers);
 
-            if (_vnProducers != null && _vnProducers.Count(p => p.IsPublisher) > 0)
+            if (_vnProducers != null && _vnProducers?.Count(p => p.IsPublisher) > 0)
                 fields.Add(MetadataField.Publishers);
 
             return fields;
@@ -186,68 +185,85 @@ namespace PlayniteVndbExtension
             return uint.Parse(searchString.Substring(4));
         }
 
-        public override string GetName()
+        public override string GetName(GetMetadataFieldArgs args)
         {
             if (AvailableFields.Contains(MetadataField.Name) && _vnData != null) 
                 return _vnData.Name;
 
-            return base.GetName();
+            return base.GetName(args);
         }
 
-        public override List<string> GetGenres()
+        public override IEnumerable<MetadataProperty> GetGenres(GetMetadataFieldArgs args)
         {
             if (AvailableFields.Contains(MetadataField.Genres) && _vnData != null)
             {
-                var genres = new List<string>();
-                genres.Add("Visual Novel");
-                return genres;
+                return new List<MetadataProperty>
+                {
+                    new MetadataNameProperty("Visual Novel")
+                };
             }
             
-            return base.GetGenres();
+            return base.GetGenres(args);
         }
 
-        public override DateTime? GetReleaseDate()
+        public override ReleaseDate? GetReleaseDate(GetMetadataFieldArgs args)
         {
             if (AvailableFields.Contains(MetadataField.ReleaseDate) && _vnData != null)
-                if (_vnData.Released.Day != null && _vnData.Released.Month != null && _vnData.Released.Year != null)
+            {
+                if (_vnData.Released.Year != null && _vnData.Released.Month != null && _vnData.Released.Day != null)
                 {
-                    return new DateTime
+                    return new ReleaseDate
                     (
-                        (int) _vnData.Released.Year.Value,
+                        (int)_vnData.Released.Year.Value,
                         _vnData.Released.Month.Value,
                         _vnData.Released.Day.Value
                     );
                 }
+                else if (_vnData.Released.Year != null && _vnData.Released.Month != null && _settings.AllowIncompleteDates)
+                {
+                    return new ReleaseDate
+                    (
+                        (int)_vnData.Released.Year.Value,
+                        _vnData.Released.Month.Value
+                    );
+                }
                 else if (_vnData.Released.Year != null && _settings.AllowIncompleteDates)
                 {
-                    var day = _vnData.Released.Day ?? 1;
-                    var month = _vnData.Released.Month ?? 1;
-                    return new DateTime((int) _vnData.Released.Year.Value, month, day);
+                    return new ReleaseDate
+                    (
+                        (int)_vnData.Released.Year.Value
+                    );
                 }
-            
-            return base.GetReleaseDate();
+            }
+
+            return base.GetReleaseDate(args);
         }
 
-
-        public override List<string> GetDevelopers()
+        public override IEnumerable<MetadataProperty> GetDevelopers(GetMetadataFieldArgs args)
         {
             if (AvailableFields.Contains(MetadataField.Developers) && _vnData != null)
-                return new ComparableList<string>(_vnProducers.Where(p => p.IsDeveloper).Select(p => p.Name)
-                    .Distinct());
+            {
+                return _vnProducers.Where(p => p.IsDeveloper)
+                    .Select(p => p.Name).Distinct()
+                    .Select(s => new MetadataNameProperty(s)).ToList();
+            }
 
-            return base.GetDevelopers();
+            return base.GetDevelopers(args);
         }
 
-        public override List<string> GetPublishers()
+        public override IEnumerable<MetadataProperty> GetPublishers(GetMetadataFieldArgs args)
         {
             if (AvailableFields.Contains(MetadataField.Developers) && _vnData != null)
-                return new ComparableList<string>(_vnProducers.Where(p => p.IsPublisher).Select(p => p.Name)
-                    .Distinct());
+            {
+                return _vnProducers.Where(p => p.IsPublisher)
+                    .Select(p => p.Name).Distinct()
+                    .Select(s => new MetadataNameProperty(s)).ToList();
+            }
 
-            return base.GetDevelopers();
+            return base.GetDevelopers(args);
         }
 
-        public override List<string> GetTags()
+        public override IEnumerable<MetadataProperty> GetTags(GetMetadataFieldArgs args)
         {
             if (AvailableFields.Contains(MetadataField.Tags) && _vnData != null)
             {
@@ -278,11 +294,11 @@ namespace PlayniteVndbExtension
                 }
                 if (tags.HasNonEmptyItems())
                 {
-                    return tags;
+                    return tags.Select(s => new MetadataNameProperty(s)).ToList();
                 }
             }
 
-            return base.GetTags();
+            return base.GetTags(args);
         }
 
         private int AddTechnicalTagIfNotMax(int technicalTags, List<string> tags, TagName tagName)
@@ -329,7 +345,10 @@ namespace PlayniteVndbExtension
         {
             var details = _tagDetails.Find(tagDetails =>
             {
-                if (tagDetails.Id.Equals(tag.Id)) return true;
+                if (tagDetails.Id.Equals(tag.Id))
+                {
+                    return true;
+                }
 
                 return false;
             });
@@ -351,33 +370,33 @@ namespace PlayniteVndbExtension
             }
         }
 
-        public override string GetDescription()
+        public override string GetDescription(GetMetadataFieldArgs args)
         {
             if (AvailableFields.Contains(MetadataField.Description) && _vnData != null)
                 return _descriptionFormatter.Format(_vnData.Description);
 
-            return base.GetDescription();
+            return base.GetDescription(args);
         }
 
-        public override int? GetCommunityScore()
+        public override int? GetCommunityScore(GetMetadataFieldArgs args)
         {
             if (AvailableFields.Contains(MetadataField.CommunityScore) && _vnData != null) 
                 return (int) (_vnData.Rating * 10.0);
 
-            return base.GetCommunityScore();
+            return base.GetCommunityScore(args);
         }
 
-        public override MetadataFile GetCoverImage()
+        public override MetadataFile GetCoverImage(GetMetadataFieldArgs args)
         {
             if (AvailableFields.Contains(MetadataField.CoverImage) && _vnData != null)
                 if (IsImageAllowed(_vnData))
                     return new MetadataFile(_vnData.Image);
 
 
-            return base.GetCoverImage();
+            return base.GetCoverImage(args);
         }
 
-        public override MetadataFile GetBackgroundImage()
+        public override MetadataFile GetBackgroundImage(GetMetadataFieldArgs args)
         {
             if (AvailableFields.Contains(MetadataField.BackgroundImage) && _vnData != null)
             {
@@ -389,10 +408,10 @@ namespace PlayniteVndbExtension
                 if (background != null) return new MetadataFile(background.Path);
             }
 
-            return base.GetBackgroundImage();
+            return base.GetBackgroundImage(args);
         }
 
-        public override List<Link> GetLinks()
+        public override IEnumerable<Link> GetLinks(GetMetadataFieldArgs args)
         {
             if (AvailableFields.Contains(MetadataField.Links) && _vnData != null)
             {
@@ -405,7 +424,7 @@ namespace PlayniteVndbExtension
                 return links; 
             }
             
-            return base.GetLinks();
+            return base.GetLinks(args);
         }
     }
 }
