@@ -1,9 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
 using Playnite.SDK;
+using Playnite.SDK.Data;
 
 namespace PlayniteVndbExtension
 {
+    public class VndbMetadataSettings
+    {
+        public int Version { get; set; } = 2;
+
+        public SpoilerLevel TagMaxSpoilerLevel { get; set; } = SpoilerLevel.Minor;
+        public ViolenceLevel ImageMaxViolenceLevel { get; set; } = ViolenceLevel.Tame;
+        public SexualityLevel ImageMaxSexualityLevel { get; set; } = SexualityLevel.Safe;
+
+        public uint MaxContentTags { get; set; } = 8;
+        public uint MaxSexualTags { get; set; } = 0;
+        public uint MaxTechnicalTags { get; set; } = 8;
+        public uint MaxAllTags { get; set; } = 15;
+
+
+        public float TagMinScore { get; set; } = 1;
+        public bool AllowIncompleteDates { get; set; } = false;
+
+        public DateTime LastTagUpdate { get; set; }
+
+        //Deprecated Configuration Values kept for configuration migration
+
+        [ObsoleteAttribute("This property is obsolete. Use MaxContentTags and ImageMaxSexualityLevel instead.", false)]
+        public bool? AllowNsfwImages { get; set; }
+        public bool ShouldSerializeAllowNsfwImages()
+        {
+            return false;
+        }
+
+        [ObsoleteAttribute("This property is obsolete. Use MaxContentTags instead.", false)]
+        public bool? TagEnableContent { get; set; }
+        public bool ShouldSerializeTagEnableContent()
+        {
+            return false;
+        }
+
+        [ObsoleteAttribute("This property is obsolete. Use MaxSexualTags instead.", false)]
+        public bool? TagEnableSexual { get; set; }
+        public bool ShouldSerializeTagEnableSexual()
+        {
+            return false;
+        }
+
+        [ObsoleteAttribute("This property is obsolete. Use MaxTechnicalTags instead.", false)]
+        public bool? TagEnableTechnical { get; set; }
+        public bool ShouldSerializeTagEnableTechnical()
+        {
+            return false;
+        }
+    }
+
     public enum SpoilerLevel
     {
         None,
@@ -25,55 +76,42 @@ namespace PlayniteVndbExtension
         Explicit
     }
     
-    public class VndbMetadataSettings : ISettings
+    public class VndbMetadataSettingsViewModel : ObservableObject, ISettings
     {
+        private VndbMetadataSettings editingClone { get; set; }
         private static readonly ILogger Logger = LogManager.GetLogger();
-        
-        private readonly VndbMetadataPlugin _plugin;
         public const int CurrentVersion = 2;
 
-        public int Version { get; set; }
+        private readonly VndbMetadataPlugin _plugin;
 
-        public SpoilerLevel TagMaxSpoilerLevel { get; set; } = SpoilerLevel.Minor;
-        public ViolenceLevel ImageMaxViolenceLevel { get; set; } = ViolenceLevel.Tame;
-        public SexualityLevel ImageMaxSexualityLevel { get; set; } = SexualityLevel.Safe;
-
-        public uint MaxContentTags { get; set; } = 8;
-        public uint MaxSexualTags { get; set; } = 0;
-        public uint MaxTechnicalTags { get; set; } = 8;
-        public uint MaxAllTags { get; set; } = 15;
-        
-        
-        public float TagMinScore { get; set; } = 1;
-        public bool AllowIncompleteDates { get; set; } = false;
-
-        public DateTime LastTagUpdate { get; set; }
-        
-        public VndbMetadataSettings()
+        private VndbMetadataSettings settings;
+        public VndbMetadataSettings Settings
         {
+            get => settings;
+            set
+            {
+                settings = value;
+                OnPropertyChanged();
+            }
         }
 
-        public VndbMetadataSettings(VndbMetadataPlugin plugin)
+        public VndbMetadataSettingsViewModel(VndbMetadataPlugin plugin)
         {
-            
             _plugin = plugin;
             var savedSettings = plugin.LoadPluginSettings<VndbMetadataSettings>();
-            if (savedSettings == null) return;
-            if (savedSettings.Version != CurrentVersion)
+            if (savedSettings != null)
+            {
+                Settings = savedSettings;
+            }
+            else
+            {
+                Settings = new VndbMetadataSettings();
+            }
+
+            if (settings.Version != CurrentVersion)
             {
                 MigrateSettingsVersion(savedSettings, _plugin);
             }
-            ImageMaxViolenceLevel = savedSettings.ImageMaxViolenceLevel;
-            ImageMaxSexualityLevel = savedSettings.ImageMaxSexualityLevel;
-            MaxContentTags = savedSettings.MaxContentTags;
-            MaxSexualTags = savedSettings.MaxSexualTags;
-            MaxTechnicalTags = savedSettings.MaxTechnicalTags;
-            MaxAllTags = savedSettings.MaxAllTags;
-            TagMaxSpoilerLevel = savedSettings.TagMaxSpoilerLevel;
-            TagMinScore = savedSettings.TagMinScore;
-            AllowIncompleteDates = savedSettings.AllowIncompleteDates;
-            LastTagUpdate = savedSettings.LastTagUpdate;
-            Version = savedSettings.Version;
         }
 
         public static void MigrateSettingsVersion(VndbMetadataSettings savedSettings, VndbMetadataPlugin plugin)
@@ -84,7 +122,6 @@ namespace PlayniteVndbExtension
                 MigrateToV2(savedSettings);
                 plugin.SavePluginSettings(savedSettings);
             }
-            
         }
 
 #pragma warning disable 618
@@ -138,51 +175,23 @@ namespace PlayniteVndbExtension
 
         public void BeginEdit()
         {
-        }
-
-        public void EndEdit()
-        {
-            _plugin.SavePluginSettings(this);
+            editingClone = Serialization.GetClone(Settings);
         }
 
         public void CancelEdit()
         {
+            Settings = editingClone;
+        }
+
+        public void EndEdit()
+        {
+            _plugin.SavePluginSettings(Settings);
         }
 
         public bool VerifySettings(out List<string> errors)
         {
             errors = new List<string>();
             return true;
-        }
-        
-        //Deprecated Configuration Values kept for configuration migration
-        
-        [ObsoleteAttribute("This property is obsolete. Use MaxContentTags and ImageMaxSexualityLevel instead.", false)]
-        public bool? AllowNsfwImages { get; set; }
-        public bool ShouldSerializeAllowNsfwImages()
-        {
-            return false;
-        }
-        
-        [ObsoleteAttribute("This property is obsolete. Use MaxContentTags instead.", false)]
-        public bool? TagEnableContent { get; set; }
-        public bool ShouldSerializeTagEnableContent()
-        {
-            return false;
-        }
-        
-        [ObsoleteAttribute("This property is obsolete. Use MaxSexualTags instead.", false)]
-        public bool? TagEnableSexual { get; set; }
-        public bool ShouldSerializeTagEnableSexual()
-        {
-            return false;
-        }
-        
-        [ObsoleteAttribute("This property is obsolete. Use MaxTechnicalTags instead.", false)]
-        public bool? TagEnableTechnical { get; set; }
-        public bool ShouldSerializeTagEnableTechnical()
-        {
-            return false;
         }
     }
 }

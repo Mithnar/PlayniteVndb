@@ -22,10 +22,16 @@ namespace PlayniteVndbExtension
 
         private readonly List<TagName> _tagNames;
         
-        private VndbMetadataSettings _settings;
+        private VndbMetadataSettingsViewModel _settings;
 
         public VndbMetadataPlugin(IPlayniteAPI playniteApi) : base(playniteApi)
         {
+            _settings = new VndbMetadataSettingsViewModel(this);
+            Properties = new MetadataPluginProperties
+            {
+                HasSettings = true
+            };
+
             var tagDumpPath = DownloadTagDump(false);
             var jsonString = File.ReadAllText(tagDumpPath);
             _tagNames = JsonConvert.DeserializeObject<List<TagName>>(jsonString);
@@ -38,9 +44,8 @@ namespace PlayniteVndbExtension
         
         public string DownloadTagDump(bool forceDownload)
         {
-            _settings = CreateSettingsIfNotExists();
             var tagDumpFile = $"{GetPluginUserDataPath()}/tag_dump.json";
-            if (forceDownload || !File.Exists(tagDumpFile) || DateTime.Now.Subtract(_settings.LastTagUpdate).Days > 7)
+            if (forceDownload || !File.Exists(tagDumpFile) || DateTime.Now.Subtract(_settings.Settings.LastTagUpdate).Days > 7)
             {
                 var archiveDownloadPath = $"{GetPluginUserDataPath()}/tagdump.json.gz";
 
@@ -61,7 +66,7 @@ namespace PlayniteVndbExtension
                 {
                     gz.CopyTo(output);
                 }
-                _settings.LastTagUpdate = DateTime.Now;
+                _settings.Settings.LastTagUpdate = DateTime.Now;
                 SavePluginSettings(_settings);
                 File.Delete(archiveDownloadPath);
             }
@@ -90,18 +95,6 @@ namespace PlayniteVndbExtension
             MetadataField.CommunityScore
         };
 
-        private VndbMetadataSettings CreateSettingsIfNotExists()
-        {
-            var settings = LoadPluginSettings<VndbMetadataSettings>();
-            if (settings == null)
-            {
-                settings = new VndbMetadataSettings();
-                SavePluginSettings(settings);
-            }
-
-            return settings;
-        }
-
         private static void HandleInvalidFlags(string method, VndbFlags provided, VndbFlags invalid)
         {
             //TODO
@@ -114,7 +107,7 @@ namespace PlayniteVndbExtension
 
         public override ISettings GetSettings(bool firstRunSettings)
         {
-            return new VndbMetadataSettings(this);
+            return _settings;
         }
 
         public override UserControl GetSettingsView(bool firstRunView)

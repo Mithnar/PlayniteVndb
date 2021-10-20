@@ -22,17 +22,17 @@
         </ObjectDataProvider>
     </UserControl.Resources>
 
-    <StackPanel>
+    <StackPanel Margin="20">
         <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="Images:" />
         <StackPanel Orientation="Horizontal" Margin="10">
             <StackPanel Margin="5">
                 <TextBlock Text="Maximum Violence Level" HorizontalAlignment="Center" />
-                <ComboBox SelectedValue="{Binding ImageMaxViolenceLevel}" MinWidth="100"
+                <ComboBox SelectedValue="{Binding Settings.ImageMaxViolenceLevel}" MinWidth="100"
                           ItemsSource="{Binding Source={StaticResource GetViolenceLevelsFromEnum}}" />
             </StackPanel>
             <StackPanel Margin="5">
                 <TextBlock Text="Maximum Sexuality Level" HorizontalAlignment="Center" />
-                <ComboBox SelectedValue="{Binding ImageMaxSexualityLevel}" MinWidth="100"
+                <ComboBox SelectedValue="{Binding Settings.ImageMaxSexualityLevel}" MinWidth="100"
                           ItemsSource="{Binding Source={StaticResource GetSexualityLevelsFromEnum}}" />
             </StackPanel>
         </StackPanel>
@@ -41,46 +41,45 @@
         <StackPanel Orientation="Horizontal" Margin="5">
             <StackPanel Margin="5">
                 <TextBlock Text="Max Tags" TextAlignment="Center" MinWidth="320"/>
-                <TextBox HorizontalAlignment="Center" Text="{Binding MaxAllTags}" MinWidth="30"></TextBox>
+                <TextBox HorizontalAlignment="Center" Text="{Binding Settings.MaxAllTags}" MinWidth="30"></TextBox>
             </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="5">
             <StackPanel Margin="5">
                 <TextBlock Text="Max Content Tags" TextAlignment="Center" MinWidth="100"/>
-                <TextBox HorizontalAlignment="Center" Text="{Binding MaxContentTags}" MinWidth="30"></TextBox>
+                <TextBox HorizontalAlignment="Center" Text="{Binding Settings.MaxContentTags}" MinWidth="30"></TextBox>
             </StackPanel>
             <StackPanel Margin="5">
                 <TextBlock Text="Max Sexual Tags" TextAlignment="Center" MinWidth="100" />
-                <TextBox HorizontalAlignment="Center" Text="{Binding MaxSexualTags}" MinWidth="30"></TextBox>
+                <TextBox HorizontalAlignment="Center" Text="{Binding Settings.MaxSexualTags}" MinWidth="30"></TextBox>
             </StackPanel>
             <StackPanel Margin="5">
                 <TextBlock Text="Max Technical Tags" TextAlignment="Center" MinWidth="100" />
-                <TextBox HorizontalAlignment="Center" Text="{Binding MaxTechnicalTags}" MinWidth="30"></TextBox>
+                <TextBox HorizontalAlignment="Center" Text="{Binding Settings.MaxTechnicalTags}" MinWidth="30"></TextBox>
             </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="5">
             <StackPanel Margin="5">
                 <TextBlock Text="Minimum Score" HorizontalAlignment="Center" />
-                <Slider Minimum="1" Maximum="3" TickFrequency="0.1" Value="{Binding TagMinScore}"
+                <Slider Minimum="1" Maximum="3" TickFrequency="0.1" Value="{Binding Settings.TagMinScore}"
                         AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="1" MinWidth="100" />
             </StackPanel>
             <StackPanel Margin="5">
                 <TextBlock Text="Spoiler Level" HorizontalAlignment="Center" />
-                <ComboBox SelectedValue="{Binding TagMaxSpoilerLevel}" MinWidth="100"
+                <ComboBox SelectedValue="{Binding Settings.TagMaxSpoilerLevel}" MinWidth="100"
                           ItemsSource="{Binding Source={StaticResource GetSpoilerLevelsFromEnum}}" />
             </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="5">
             <TextBlock Text="Tags last Update on " />
-            <TextBlock x:Name="TagDateField" Text="{Binding LastTagUpdate }" MinWidth="100" />
+            <TextBlock x:Name="TagDateField" Text="{Binding Settings.LastTagUpdate }" MinWidth="100" />
         </StackPanel>
         <Separator />
         <StackPanel>
             <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="Dates:" />
             <StackPanel Orientation="Horizontal" Margin="10">
                 <TextBlock Text="Allow incomplete dates: " />
-                <CheckBox IsChecked="{Binding AllowIncompleteDates}" />
-                <TextBlock Text=" (missing day will show as 01, missing month will show as january)" />
+                <CheckBox IsChecked="{Binding Settings.AllowIncompleteDates}" />
             </StackPanel>
         </StackPanel>
     </StackPanel>

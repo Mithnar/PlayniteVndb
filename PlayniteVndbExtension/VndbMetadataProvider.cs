@@ -43,7 +43,7 @@ namespace PlayniteVndbExtension
             _vndbClient = plugin.VndbClient;
             _pluginUserDataPath = plugin.GetPluginUserDataPath(); 
             _settings = plugin.LoadPluginSettings<VndbMetadataSettings>();
-            VndbMetadataSettings.MigrateSettingsVersion(_settings, plugin);
+            VndbMetadataSettingsViewModel.MigrateSettingsVersion(_settings, plugin);
             _descriptionFormatter = descriptionFormatter;
         }
 
