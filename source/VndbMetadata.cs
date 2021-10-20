@@ -40,7 +40,7 @@ namespace VndbMetadata
             MetadataField.CommunityScore
         };
 
-        public override string Name => "VNDBTest";
+        public override string Name => "VNDB";
 
         private readonly List<TagName> tagNames;
 

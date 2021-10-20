@@ -12,7 +12,6 @@ namespace VndbMetadata
     public class VndbMetadataSettings : ObservableObject
     {
         public int Version { get; set; } = 2;
-
         public SpoilerLevel TagMaxSpoilerLevel { get; set; } = SpoilerLevel.Minor;
         public ViolenceLevel ImageMaxViolenceLevel { get; set; } = ViolenceLevel.Tame;
         public SexualityLevel ImageMaxSexualityLevel { get; set; } = SexualityLevel.Safe;
@@ -21,11 +20,11 @@ namespace VndbMetadata
         public uint MaxSexualTags { get; set; } = 0;
         public uint MaxTechnicalTags { get; set; } = 8;
         public uint MaxAllTags { get; set; } = 15;
-
-
         public float TagMinScore { get; set; } = 1;
         public bool AllowIncompleteDates { get; set; } = false;
-
+        public string ContentTagPrefix { get; set; } = string.Empty;
+        public string SexualTagPrefix { get; set; } = string.Empty;
+        public string TechnicalTagPrefix { get; set; } = string.Empty;
         public DateTime LastTagUpdate { get; set; }
 
         //Deprecated Configuration Values kept for configuration migration

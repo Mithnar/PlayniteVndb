@@ -342,7 +342,7 @@ namespace VndbMetadata
             if (technicalTags < settings.MaxTechnicalTags)
             {
                 ++technicalTags;
-                tags.Add(tagName.Name);
+                tags.Add(string.Concat(settings.TechnicalTagPrefix, tagName.Name));
             }
 
             return technicalTags;
@@ -353,7 +353,7 @@ namespace VndbMetadata
             if (sexualTags < settings.MaxSexualTags)
             {
                 ++sexualTags;
-                tags.Add(tagName.Name);
+                tags.Add(string.Concat(settings.SexualTagPrefix, tagName.Name));
             }
 
             return sexualTags;
@@ -364,7 +364,7 @@ namespace VndbMetadata
             if (contentTags < settings.MaxContentTags)
             {
                 ++contentTags;
-                tags.Add(tagName.Name);
+                tags.Add(string.Concat(settings.ContentTagPrefix, tagName.Name));
             }
 
             return contentTags;

@@ -65,6 +65,24 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="5">
             <StackPanel Margin="5">
+                <TextBlock Text="Content Prefix" TextAlignment="Center" MinWidth="100"/>
+                <TextBox HorizontalAlignment="Center" Text="{Binding Settings.ContentTagPrefix}" MinWidth="75"></TextBox>
+            </StackPanel>
+            <StackPanel Margin="5">
+                <TextBlock Text="Sexual Prefix" TextAlignment="Center" MinWidth="100"/>
+                <TextBox HorizontalAlignment="Center" Text="{Binding Settings.SexualTagPrefix}" MinWidth="75"></TextBox>
+            </StackPanel>
+            <StackPanel Margin="5">
+                <TextBlock Text="Technical Prefix" TextAlignment="Center" MinWidth="100"/>
+                <TextBox HorizontalAlignment="Center" Text="{Binding Settings.TechnicalTagPrefix}" MinWidth="75"></TextBox>
+            </StackPanel>
+            <StackPanel Margin="5">
+                <TextBlock Text="(Keep textbox empty to disable" TextAlignment="Left" MinWidth="100"/>
+                <TextBlock Text=" prefixes for the category)" TextAlignment="Left" MinWidth="100"/>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="5">
+            <StackPanel Margin="5">
                 <TextBlock Text="Minimum Score" HorizontalAlignment="Center" />
                 <Slider Minimum="1" Maximum="3" TickFrequency="0.1" Value="{Binding Settings.TagMinScore}"
                         AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="1" MinWidth="100" />
@@ -77,7 +95,7 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="5">
             <TextBlock Text="Tags last Update on " />
-            <TextBlock x:Name="TagDateField" Text="{Binding Settings.LastTagUpdate }" MinWidth="100" />
+            <TextBlock x:Name="TagDateField" Text="{Binding Settings.LastTagUpdate}" MinWidth="100" />
         </StackPanel>
         <Separator />
         <StackPanel>
