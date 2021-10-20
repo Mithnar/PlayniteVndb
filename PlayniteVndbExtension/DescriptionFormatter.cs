@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
-namespace PlayniteVndbExtension
+namespace VndbMetadata
 {
     public class DescriptionFormatter
     {
@@ -18,7 +22,7 @@ namespace PlayniteVndbExtension
             formatted = _urlMatcher.Replace(formatted, "<a href=\"$1\">$2</a>");
             return formatted;
         }
-        
+
         public string RemoveTags(string description)
         {
             return description == null ? "" : _urlMatcher.Replace(description, "$2");

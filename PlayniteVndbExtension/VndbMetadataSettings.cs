@@ -1,11 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using Playnite.SDK;
+﻿using Playnite.SDK;
 using Playnite.SDK.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using VndbMetadata.Models;
 
-namespace PlayniteVndbExtension
+namespace VndbMetadata
 {
-    public class VndbMetadataSettings
+    public class VndbMetadataSettings : ObservableObject
     {
         public int Version { get; set; } = 2;
 
@@ -55,34 +59,13 @@ namespace PlayniteVndbExtension
         }
     }
 
-    public enum SpoilerLevel
-    {
-        None,
-        Minor,
-        Major
-    }
-    
-    public enum ViolenceLevel
-    {
-        Tame,
-        Violent,
-        Brutal
-    }
-    
-    public enum SexualityLevel
-    {
-        Safe,
-        Suggestive,
-        Explicit
-    }
-    
     public class VndbMetadataSettingsViewModel : ObservableObject, ISettings
     {
         private VndbMetadataSettings editingClone { get; set; }
         private static readonly ILogger Logger = LogManager.GetLogger();
         public const int CurrentVersion = 2;
 
-        private readonly VndbMetadataPlugin _plugin;
+        private readonly VndbMetadata plugin;
 
         private VndbMetadataSettings settings;
         public VndbMetadataSettings Settings
@@ -95,9 +78,9 @@ namespace PlayniteVndbExtension
             }
         }
 
-        public VndbMetadataSettingsViewModel(VndbMetadataPlugin plugin)
+        public VndbMetadataSettingsViewModel(VndbMetadata plugin)
         {
-            _plugin = plugin;
+            this.plugin = plugin;
             var savedSettings = plugin.LoadPluginSettings<VndbMetadataSettings>();
             if (savedSettings != null)
             {
@@ -110,11 +93,11 @@ namespace PlayniteVndbExtension
 
             if (settings.Version != CurrentVersion)
             {
-                MigrateSettingsVersion(savedSettings, _plugin);
+                MigrateSettingsVersion(savedSettings, plugin);
             }
         }
 
-        public static void MigrateSettingsVersion(VndbMetadataSettings savedSettings, VndbMetadataPlugin plugin)
+        public static void MigrateSettingsVersion(VndbMetadataSettings savedSettings, VndbMetadata plugin)
         {
             if (savedSettings.Version != CurrentVersion)
             {
@@ -133,7 +116,7 @@ namespace PlayniteVndbExtension
                 savedSettings.Version = 1;
             }
         }
-        
+
         private static void MigrateToV2(VndbMetadataSettings savedSettings)
         {
             if (savedSettings.Version == 1)
@@ -148,7 +131,7 @@ namespace PlayniteVndbExtension
                     savedSettings.ImageMaxSexualityLevel = SexualityLevel.Safe;
                     savedSettings.ImageMaxViolenceLevel = ViolenceLevel.Tame;
                 }
-                
+
                 if (savedSettings.TagEnableContent.HasValue && savedSettings.TagEnableContent.Value)
                 {
                     savedSettings.MaxContentTags = 8;
@@ -185,7 +168,7 @@ namespace PlayniteVndbExtension
 
         public void EndEdit()
         {
-            _plugin.SavePluginSettings(Settings);
+            plugin.SavePluginSettings(Settings);
         }
 
         public bool VerifySettings(out List<string> errors)
