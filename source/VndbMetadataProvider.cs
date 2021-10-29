@@ -221,7 +221,9 @@ namespace VndbMetadata
         public override string GetName(GetMetadataFieldArgs args)
         {
             if (AvailableFields.Contains(MetadataField.Name) && vnData != null)
+            {
                 return vnData.Name;
+            }
 
             return base.GetName(args);
         }
