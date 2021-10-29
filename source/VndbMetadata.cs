@@ -68,6 +68,7 @@ namespace VndbMetadata
         public string DownloadTagDump(bool forceDownload)
         {
             var tagDumpFile = $"{GetPluginUserDataPath()}/tag_dump.json";
+
             if (forceDownload || !File.Exists(tagDumpFile) || DateTime.Now.Subtract(settings.Settings.LastTagUpdate).Days > 7)
             {
                 var archiveDownloadPath = $"{GetPluginUserDataPath()}/tagdump.json.gz";
@@ -90,7 +91,7 @@ namespace VndbMetadata
                     gz.CopyTo(output);
                 }
                 settings.Settings.LastTagUpdate = DateTime.Now;
-                SavePluginSettings(settings);
+                SavePluginSettings(settings.Settings);
                 File.Delete(archiveDownloadPath);
             }
 
