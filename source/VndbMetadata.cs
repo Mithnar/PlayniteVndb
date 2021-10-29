@@ -56,8 +56,12 @@ namespace VndbMetadata
             };
 
             var tagDumpPath = DownloadTagDump(false);
-            var jsonString = File.ReadAllText(tagDumpPath);
-            tagNames = JsonConvert.DeserializeObject<List<TagName>>(jsonString);
+            if (tagDumpPath != null)
+            {
+                var jsonString = File.ReadAllText(tagDumpPath);
+                tagNames = JsonConvert.DeserializeObject<List<TagName>>(jsonString);
+            }
+
             VndbClient = new Vndb(true)
                 .WithClientDetails("PlayniteVndbExtension", "1.2")
                 .WithFlagsCheck(true, HandleInvalidFlags)
@@ -68,15 +72,25 @@ namespace VndbMetadata
         public string DownloadTagDump(bool forceDownload)
         {
             var tagDumpFile = $"{GetPluginUserDataPath()}/tag_dump.json";
-
             if (forceDownload || !File.Exists(tagDumpFile) || DateTime.Now.Subtract(settings.Settings.LastTagUpdate).Days > 7)
             {
                 var archiveDownloadPath = $"{GetPluginUserDataPath()}/tagdump.json.gz";
-
-                logger.Debug("Downloading new Tag Dump");
-                using (var webClient = new WebClient())
+                try
                 {
-                    webClient.DownloadFile("https://dl.vndb.org/dump/vndb-tags-latest.json.gz", archiveDownloadPath);
+                    logger.Debug("Downloading new Tag Dump");
+                    using (var webClient = new WebClient())
+                    {
+                        webClient.DownloadFile("https://dl.vndb.org/dump/vndb-tags-latest.json.gz", archiveDownloadPath);
+                    }
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e, "Error during tag dump download");
+                    if (File.Exists(tagDumpFile))
+                    {
+                        return tagDumpFile;
+                    }
+                    return null;
                 }
 
                 if (File.Exists(tagDumpFile))

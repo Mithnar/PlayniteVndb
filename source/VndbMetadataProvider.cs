@@ -146,7 +146,7 @@ namespace VndbMetadata
                 fields.Add(MetadataField.ReleaseDate);
             }
 
-            if (HasViableTags())
+            if (tagDetails != null && HasViableTags())
             {
                 fields.Add(MetadataField.Tags);
             }
