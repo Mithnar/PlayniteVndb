@@ -1,8 +1,15 @@
-﻿# Changelog
+# Changelog
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [2.0]
+Thank you [darklinkpower](https://github.com/darklinkpower) for working on the 2.0 Release
+### Added
+- [Issue #18](https://github.com/Mithnar/PlayniteVndb/issues/18) Option to add a prefix to tags to order and identify them on import
+### Fixed
+- [Issue #20](https://github.com/Mithnar/PlayniteVndb/issues/20) Extensions fails to load in the latest version of Playnite
 
 ## [1.2]
 ### Added
