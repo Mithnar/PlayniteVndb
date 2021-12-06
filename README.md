@@ -14,12 +14,6 @@ https://vndb.org/
 - Configure the extension to your needs (Settings../Metadata Sources/VNDB)
 - You can now use "Download Metadata" under "Edit Game Details" to use VNDB as a metadata source
 
-### .zip
-- Download the zipped extension: https://github.com/Mithnar/PlayniteVndb/releases
-- Unzip and drop the "Extensions" folders into your Playnite directory
-- Configure the extension to your needs (Settings../Metadata Sources/VNDB)
-- You can now use "Download Metadata" under "Edit Game Details" to use VNDB as a metadata source
-
 ## Screenshots
 ![Settings](https://raw.githubusercontent.com/Mithnar/PlayniteVndb/readme/images/vndb_settings.png "Settings")
 ![Game Selection](https://raw.githubusercontent.com/Mithnar/PlayniteVndb/readme/images/vndb_selection.png "game selection")
@@ -30,15 +24,12 @@ For the detailed release history, head over to the [Changelog](https://github.co
 
 
 ### Recent Releases:
-#### [1.2](https://github.com/Mithnar/PlayniteVndb/releases/tag/1.2)
-##### Added
-- [Issue #13](https://github.com/Mithnar/PlayniteVndb/issues/13) Enable searching for a vndb entry by id (syntax: id:v2002)
-- [Issue #16](https://github.com/Mithnar/PlayniteVndb/issues/16) Tag Dumps are now downloaded on start up if not present or outdated
-##### Changed
-- [Issue #14](https://github.com/Mithnar/PlayniteVndb/issues/14) Adjust handling of nsfw images to changes in vndb api
-- [Issue #15](https://github.com/Mithnar/PlayniteVndb/issues/15) It's now possible to set a limit to tags by category and overall
-##### Fixed
-- [Issue #12](https://github.com/Mithnar/PlayniteVndb/issues/12) Selecting a VN when multiple VNs with the same name exist should now return the selected VN
+## [2.0]
+Thank you [darklinkpower](https://github.com/darklinkpower) for working on the 2.0 Release
+### Added
+- [Issue #18](https://github.com/Mithnar/PlayniteVndb/issues/18) Option to add a prefix to tags to order and identify them on import
+### Fixed
+- [Issue #20](https://github.com/Mithnar/PlayniteVndb/issues/20) Extensions fails to load in the latest version of Playnite
 
 ## Credits
 https://github.com/KuroThing
