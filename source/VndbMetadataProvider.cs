@@ -300,43 +300,114 @@ namespace VndbMetadata
 
         public override IEnumerable<MetadataProperty> GetTags(GetMetadataFieldArgs args)
         {
-            if (AvailableFields.Contains(MetadataField.Tags) && vnData != null)
+            if (!AvailableFields.Contains(MetadataField.Tags) || vnData == null)
             {
-                var tags = new List<string>();
-                var contentTags = 0;
-                var sexualTags = 0;
-                var technicalTags = 0;
-                foreach (var (tagMetadata, tagName) in vnData.Tags.OrderByDescending(tag => tag.Score).Select(MapTagToNamedTuple))
+                return base.GetTags(args);
+            }
+            
+            var tags = new List<string>();
+            var contentTags = 0;
+            var sexualTags = 0;
+            var technicalTags = 0;
+            foreach (var (tagMetadata, tagName) in vnData.Tags.OrderByDescending(tag => tag.Score).Select(MapTagToNamedTuple))
+            {
+                if (tagName == null)
                 {
-                    if (tagName == null)
-                    {
-                        logger.Warn("VndbMetadataProvider: Could not find tag: " + tagMetadata.Id);
-                    }
-                    else if (TagIsAvailableForScoreAndSpoiler(tagMetadata) &&
-                             TagIsInEnabledCategory(tagName) &&
-                             tags.Count < settings.MaxAllTags)
-                    {
-                        if (tagName.Cat.Equals("cont"))
-                        {
-                            contentTags = AddContentTagIfNotMax(contentTags, tags, tagName);
-                        }
-                        else if (tagName.Cat.Equals("ero"))
-                        {
-                            sexualTags = AddSexualTagIfNotMax(sexualTags, tags, tagName);
-                        }
-                        else if (tagName.Cat.Equals("tech"))
-                        {
-                            technicalTags = AddTechnicalTagIfNotMax(technicalTags, tags, tagName);
-                        }
-                    }
+                    logger.Warn("VndbMetadataProvider: Could not find tag: " + tagMetadata.Id);
                 }
-                if (tags.HasNonEmptyItems())
+                else if (TagIsAvailableForScoreAndSpoiler(tagMetadata) &&
+                         TagIsInEnabledCategory(tagName) &&
+                         tags.Count < settings.MaxAllTags)
                 {
-                    return tags.Select(s => new MetadataNameProperty(s)).ToList();
+                    switch (tagName.Cat)
+                    {
+                        case "cont":
+                            contentTags = AddContentTagIfNotMax(contentTags, tags, tagName);
+                            break;
+                        case "ero":
+                            sexualTags = AddSexualTagIfNotMax(sexualTags, tags, tagName);
+                            break;
+                        case "tech":
+                            technicalTags = AddTechnicalTagIfNotMax(technicalTags, tags, tagName);
+                            break;
+                    }
                 }
             }
 
-            return base.GetTags(args);
+            if (settings.PlaytimeTagEnabled)
+            {
+                AddPlaytimeTag(tags);
+            }
+
+            if (!tags.HasNonEmptyItems())
+            {
+                return base.GetTags(args);
+            }
+            
+            tags.Sort();
+            return tags.Select(s => new MetadataNameProperty(s)).ToList();
+
+        }
+
+        private void AddPlaytimeTag(List<string> tags)
+        {
+            switch (vnData.Length)
+            {
+                case VisualNovelLength.VeryShort:
+                    var veryShortTag = "Very Short";
+                    if (!string.IsNullOrEmpty(settings.VeryShortPlaytimeName))
+                    {
+                        veryShortTag = settings.VeryShortPlaytimeName;
+                    }
+
+                    tags.Add(veryShortTag);
+                    break;
+                case VisualNovelLength.Short:
+                    var shortTag = "Short";
+                    if (!string.IsNullOrEmpty(settings.ShortPlaytimeName))
+                    {
+                        shortTag = settings.ShortPlaytimeName;
+                    }
+
+                    tags.Add(shortTag);
+                    break;
+                case VisualNovelLength.Medium:
+                    var mediumTag = "Medium";
+                    if (!string.IsNullOrEmpty(settings.MediumPlaytimeName))
+                    {
+                        mediumTag = settings.MediumPlaytimeName;
+                    }
+
+                    tags.Add(mediumTag);
+                    break;
+                case VisualNovelLength.Long:
+                    var longTag = "Long";
+                    if (!string.IsNullOrEmpty(settings.LongPlaytimeName))
+                    {
+                        longTag = settings.LongPlaytimeName;
+                    }
+
+                    tags.Add(longTag);
+                    break;
+                case VisualNovelLength.VeryLong:
+                    var veryLongTag = "Very Long";
+                    if (!string.IsNullOrEmpty(settings.VeryLongPlaytimeName))
+                    {
+                        veryLongTag = settings.VeryLongPlaytimeName;
+                    }
+
+                    tags.Add(veryLongTag);
+                    break;
+                default:
+                    var unknownTag = "Unknown Length";
+                    if (!string.IsNullOrEmpty(settings.UnknownPlaytimeName))
+                    {
+                        unknownTag = settings.UnknownPlaytimeName;
+                    }
+
+                    tags.Add(unknownTag);
+                    break;
+            }
         }
 
         private int AddTechnicalTagIfNotMax(int technicalTags, List<string> tags, TagName tagName)

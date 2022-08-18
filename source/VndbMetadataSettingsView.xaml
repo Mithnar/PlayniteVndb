@@ -6,7 +6,7 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:enums="clr-namespace:VndbMetadata.Models;assembly=VndbMetadata"
              mc:Ignorable="d"
-             d:DesignHeight="400" d:DesignWidth="600">
+             d:DesignHeight="600" d:DesignWidth="600">
 
 
     <UserControl.Resources>
@@ -97,11 +97,45 @@
             <TextBlock Text="Tags last Update on " />
             <TextBlock x:Name="TagDateField" Text="{Binding Settings.LastTagUpdate}" MinWidth="100" />
         </StackPanel>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <StackPanel Orientation="Horizontal" >
+                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Text="Enable Playtime Tag:" Margin="0, 0 , 5 , 0" />
+                    <CheckBox HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked = "{Binding Settings.PlaytimeTagEnabled}"></CheckBox>
+                </StackPanel>
+                <Grid Margin="20, 0, 0, 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"></ColumnDefinition>
+                        <ColumnDefinition Width="200"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="26"></RowDefinition>
+                        <RowDefinition Height="26"></RowDefinition>
+                        <RowDefinition Height="26"></RowDefinition>
+                        <RowDefinition Height="26"></RowDefinition>
+                        <RowDefinition Height="26"></RowDefinition>
+                        <RowDefinition Height="26"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Very Short Playtime: " />
+                    <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Settings.VeryShortPlaytimeName}"></TextBox>
+                    <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Short Playtime: " />
+                    <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Settings.ShortPlaytimeName}"></TextBox>
+                    <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="Medium Playtime: " />
+                    <TextBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Settings.MediumPlaytimeName}"></TextBox>
+                    <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="Long Playtime: " />
+                    <TextBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Settings.LongPlaytimeName}"></TextBox>
+                    <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="Very Long Playtime: " />
+                    <TextBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Settings.VeryLongPlaytimeName}"></TextBox>
+                    <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Text="Unknown Playtime: " />
+                    <TextBox Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Settings.UnknownPlaytimeName}"></TextBox>
+                </Grid>
+            </StackPanel>
+        </StackPanel>
         <Separator />
         <StackPanel>
             <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="Dates:" />
             <StackPanel Orientation="Horizontal" Margin="10">
-                <TextBlock Text="Allow incomplete dates: " />
+                <TextBlock Text="Allow incomplete dates: " Margin="0, 0 , 5 , 0" />
                 <CheckBox IsChecked="{Binding Settings.AllowIncompleteDates}" />
             </StackPanel>
         </StackPanel>
