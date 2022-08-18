@@ -27,7 +27,21 @@ namespace VndbMetadata
         public string TechnicalTagPrefix { get; set; } = string.Empty;
         public DateTime LastTagUpdate { get; set; }
 
-        //Deprecated Configuration Values kept for configuration migration
+        public bool PlaytimeTagEnabled { get; set; } = false;
+
+        public string VeryShortPlaytimeName { get; set; } = "Very Short";
+
+        public string ShortPlaytimeName { get; set; } = "Short";
+
+        public string MediumPlaytimeName { get; set; } = "Medium";
+
+        public string LongPlaytimeName { get; set; } = "Long";
+
+        public string VeryLongPlaytimeName { get; set; } = "Very Long";
+        
+        public string UnknownPlaytimeName { get; set; } = "Unknown Length";
+
+            //Deprecated Configuration Values kept for configuration migration
 
         [ObsoleteAttribute("This property is obsolete. Use MaxContentTags and ImageMaxSexualityLevel instead.", false)]
         public bool? AllowNsfwImages { get; set; }
