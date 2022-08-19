@@ -24,6 +24,11 @@ For the detailed release history, head over to the [Changelog](https://github.co
 
 
 ### Recent Releases:
+## [2.1]
+I planned on releasing Bulk Metadata Import in 2.1, but decided to get some features out before, as the bulk import will still take awhile
+### Added
+- [Issue #22](https://github.com/Mithnar/PlayniteVndb/issues/22) Option to completely disable specific fields for metadata import
+- [Issue #24](https://github.com/Mithnar/PlayniteVndb/issues/24) Option to import estimated playtime as a tag
 ## [2.0]
 Thank you [darklinkpower](https://github.com/darklinkpower) for working on the 2.0 Release
 ### Added
