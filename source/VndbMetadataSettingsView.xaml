@@ -6,7 +6,7 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:enums="clr-namespace:VndbMetadata.Models;assembly=VndbMetadata"
              mc:Ignorable="d"
-             d:DesignHeight="600" d:DesignWidth="600">
+             d:DesignHeight="800" d:DesignWidth="600">
 
 
     <UserControl.Resources>
@@ -26,118 +26,158 @@
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </UserControl.Resources>
-    
-    <StackPanel Margin="20">
-        <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="Images:" />
-        <StackPanel Orientation="Horizontal" Margin="10">
-            <StackPanel Margin="5">
-                <TextBlock Text="Maximum Violence Level" HorizontalAlignment="Center" />
-                <ComboBox SelectedValue="{Binding Settings.ImageMaxViolenceLevel}" MinWidth="100"
-                          ItemsSource="{Binding Source={StaticResource GetViolenceLevelsFromEnum}}" />
-            </StackPanel>
-            <StackPanel Margin="5">
-                <TextBlock Text="Maximum Sexuality Level" HorizontalAlignment="Center" />
-                <ComboBox SelectedValue="{Binding Settings.ImageMaxSexualityLevel}" MinWidth="100"
-                          ItemsSource="{Binding Source={StaticResource GetSexualityLevelsFromEnum}}" />
-            </StackPanel>
-        </StackPanel>
-        <Separator />
-        <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="Tags:" />
-        <StackPanel Orientation="Horizontal" Margin="5">
-            <StackPanel Margin="5">
-                <TextBlock Text="Max Tags" TextAlignment="Center" MinWidth="320"/>
-                <TextBox HorizontalAlignment="Center" Text="{Binding Settings.MaxAllTags}" MinWidth="30" />
-            </StackPanel>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="5">
-            <StackPanel Margin="5">
-                <TextBlock Text="Max Content Tags" TextAlignment="Center" MinWidth="100"/>
-                <TextBox HorizontalAlignment="Center" Text="{Binding Settings.MaxContentTags}" MinWidth="30"></TextBox>
-            </StackPanel>
-            <StackPanel Margin="5">
-                <TextBlock Text="Max Sexual Tags" TextAlignment="Center" MinWidth="100" />
-                <TextBox HorizontalAlignment="Center" Text="{Binding Settings.MaxSexualTags}" MinWidth="30"></TextBox>
-            </StackPanel>
-            <StackPanel Margin="5">
-                <TextBlock Text="Max Technical Tags" TextAlignment="Center" MinWidth="100" />
-                <TextBox HorizontalAlignment="Center" Text="{Binding Settings.MaxTechnicalTags}" MinWidth="30"></TextBox>
-            </StackPanel>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="5">
-            <StackPanel Margin="5">
-                <TextBlock Text="Content Prefix" TextAlignment="Center" MinWidth="100"/>
-                <TextBox HorizontalAlignment="Center" Text="{Binding Settings.ContentTagPrefix}" MinWidth="75"></TextBox>
-            </StackPanel>
-            <StackPanel Margin="5">
-                <TextBlock Text="Sexual Prefix" TextAlignment="Center" MinWidth="100"/>
-                <TextBox HorizontalAlignment="Center" Text="{Binding Settings.SexualTagPrefix}" MinWidth="75"></TextBox>
-            </StackPanel>
-            <StackPanel Margin="5">
-                <TextBlock Text="Technical Prefix" TextAlignment="Center" MinWidth="100"/>
-                <TextBox HorizontalAlignment="Center" Text="{Binding Settings.TechnicalTagPrefix}" MinWidth="75"></TextBox>
-            </StackPanel>
-            <StackPanel Margin="5">
-                <TextBlock Text="(Keep textbox empty to disable" TextAlignment="Left" MinWidth="100"/>
-                <TextBlock Text=" prefixes for the category)" TextAlignment="Left" MinWidth="100"/>
-            </StackPanel>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="5">
-            <StackPanel Margin="5">
-                <TextBlock Text="Minimum Score" HorizontalAlignment="Center" />
-                <Slider Minimum="1" Maximum="3" TickFrequency="0.1" Value="{Binding Settings.TagMinScore}"
-                        AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="1" MinWidth="100" />
-            </StackPanel>
-            <StackPanel Margin="5">
-                <TextBlock Text="Spoiler Level" HorizontalAlignment="Center" />
-                <ComboBox SelectedValue="{Binding Settings.TagMaxSpoilerLevel}" MinWidth="100"
-                          ItemsSource="{Binding Source={StaticResource GetSpoilerLevelsFromEnum}}" />
-            </StackPanel>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="5">
-            <TextBlock Text="Tags last Update on " />
-            <TextBlock x:Name="TagDateField" Text="{Binding Settings.LastTagUpdate}" MinWidth="100" />
-        </StackPanel>
-        <StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="5">
-                <StackPanel Orientation="Horizontal" >
-                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Text="Enable Playtime Tag:" Margin="0, 0 , 5 , 0" />
-                    <CheckBox HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked = "{Binding Settings.PlaytimeTagEnabled}"></CheckBox>
+    <ScrollViewer>
+        <StackPanel Margin="20">
+            <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="Images:" />
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <StackPanel Margin="5">
+                    <TextBlock Text="Maximum Violence Level" HorizontalAlignment="Center" />
+                    <ComboBox SelectedValue="{Binding Settings.ImageMaxViolenceLevel}" MinWidth="100"
+                              ItemsSource="{Binding Source={StaticResource GetViolenceLevelsFromEnum}}" />
                 </StackPanel>
-                <Grid Margin="20, 0, 0, 0">
+                <StackPanel Margin="5">
+                    <TextBlock Text="Maximum Sexuality Level" HorizontalAlignment="Center" />
+                    <ComboBox SelectedValue="{Binding Settings.ImageMaxSexualityLevel}" MinWidth="100"
+                              ItemsSource="{Binding Source={StaticResource GetSexualityLevelsFromEnum}}" />
+                </StackPanel>
+            </StackPanel>
+            <Separator />
+            <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="Tags:" />
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <StackPanel Margin="5">
+                    <TextBlock Text="Max Tags" TextAlignment="Center" MinWidth="320"/>
+                    <TextBox HorizontalAlignment="Center" Text="{Binding Settings.MaxAllTags}" MinWidth="30" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <StackPanel Margin="5">
+                    <TextBlock Text="Max Content Tags" TextAlignment="Center" MinWidth="100"/>
+                    <TextBox HorizontalAlignment="Center" Text="{Binding Settings.MaxContentTags}" MinWidth="30"></TextBox>
+                </StackPanel>
+                <StackPanel Margin="5">
+                    <TextBlock Text="Max Sexual Tags" TextAlignment="Center" MinWidth="100" />
+                    <TextBox HorizontalAlignment="Center" Text="{Binding Settings.MaxSexualTags}" MinWidth="30"></TextBox>
+                </StackPanel>
+                <StackPanel Margin="5">
+                    <TextBlock Text="Max Technical Tags" TextAlignment="Center" MinWidth="100" />
+                    <TextBox HorizontalAlignment="Center" Text="{Binding Settings.MaxTechnicalTags}" MinWidth="30"></TextBox>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <StackPanel Margin="5">
+                    <TextBlock Text="Content Prefix" TextAlignment="Center" MinWidth="100"/>
+                    <TextBox HorizontalAlignment="Center" Text="{Binding Settings.ContentTagPrefix}" MinWidth="75"></TextBox>
+                </StackPanel>
+                <StackPanel Margin="5">
+                    <TextBlock Text="Sexual Prefix" TextAlignment="Center" MinWidth="100"/>
+                    <TextBox HorizontalAlignment="Center" Text="{Binding Settings.SexualTagPrefix}" MinWidth="75"></TextBox>
+                </StackPanel>
+                <StackPanel Margin="5">
+                    <TextBlock Text="Technical Prefix" TextAlignment="Center" MinWidth="100"/>
+                    <TextBox HorizontalAlignment="Center" Text="{Binding Settings.TechnicalTagPrefix}" MinWidth="75"></TextBox>
+                </StackPanel>
+                <StackPanel Margin="5">
+                    <TextBlock Text="(Keep textbox empty to disable" TextAlignment="Left" MinWidth="100"/>
+                    <TextBlock Text=" prefixes for the category)" TextAlignment="Left" MinWidth="100"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <StackPanel Margin="5">
+                    <TextBlock Text="Minimum Score" HorizontalAlignment="Center" />
+                    <Slider Minimum="1" Maximum="3" TickFrequency="0.1" Value="{Binding Settings.TagMinScore}"
+                            AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="1" MinWidth="100" />
+                </StackPanel>
+                <StackPanel Margin="5">
+                    <TextBlock Text="Spoiler Level" HorizontalAlignment="Center" />
+                    <ComboBox SelectedValue="{Binding Settings.TagMaxSpoilerLevel}" MinWidth="100"
+                              ItemsSource="{Binding Source={StaticResource GetSpoilerLevelsFromEnum}}" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock Text="Tags last Update on " />
+                <TextBlock x:Name="TagDateField" Text="{Binding Settings.LastTagUpdate}" MinWidth="100" />
+            </StackPanel>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <StackPanel Orientation="Horizontal" >
+                        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Text="Enable Playtime Tag:" Margin="0, 0 , 5 , 0" />
+                        <CheckBox HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked = "{Binding Settings.PlaytimeTagEnabled}"></CheckBox>
+                    </StackPanel>
+                    <Grid Margin="20, 0, 0, 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"></ColumnDefinition>
+                            <ColumnDefinition Width="200"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="26"></RowDefinition>
+                            <RowDefinition Height="26"></RowDefinition>
+                            <RowDefinition Height="26"></RowDefinition>
+                            <RowDefinition Height="26"></RowDefinition>
+                            <RowDefinition Height="26"></RowDefinition>
+                            <RowDefinition Height="26"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Very Short Playtime: " />
+                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Settings.VeryShortPlaytimeName}"></TextBox>
+                        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Short Playtime: " />
+                        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Settings.ShortPlaytimeName}"></TextBox>
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="Medium Playtime: " />
+                        <TextBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Settings.MediumPlaytimeName}"></TextBox>
+                        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="Long Playtime: " />
+                        <TextBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Settings.LongPlaytimeName}"></TextBox>
+                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="Very Long Playtime: " />
+                        <TextBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Settings.VeryLongPlaytimeName}"></TextBox>
+                        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Text="Unknown Playtime: " />
+                        <TextBox Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Settings.UnknownPlaytimeName}"></TextBox>
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+            <Separator />
+            <StackPanel>
+                <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="Dates:" />
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <TextBlock Text="Allow incomplete dates: " Margin="0, 0 , 5 , 0" />
+                    <CheckBox IsChecked="{Binding Settings.AllowIncompleteDates}" />
+                </StackPanel>
+            </StackPanel>
+            <Separator />
+            <StackPanel>
+                <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="Ignore Fields:" />
+                <Grid Margin="10">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150"></ColumnDefinition>
-                        <ColumnDefinition Width="200"></ColumnDefinition>
+                        <ColumnDefinition Width="160"></ColumnDefinition>
+                        <ColumnDefinition Width="50"></ColumnDefinition>
+                        <ColumnDefinition Width="160"></ColumnDefinition>
+                        <ColumnDefinition Width="50"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="26"></RowDefinition>
-                        <RowDefinition Height="26"></RowDefinition>
-                        <RowDefinition Height="26"></RowDefinition>
-                        <RowDefinition Height="26"></RowDefinition>
-                        <RowDefinition Height="26"></RowDefinition>
-                        <RowDefinition Height="26"></RowDefinition>
+                        <RowDefinition Height="22"></RowDefinition>
+                        <RowDefinition Height="22"></RowDefinition>
+                        <RowDefinition Height="22"></RowDefinition>
+                        <RowDefinition Height="22"></RowDefinition>
+                        <RowDefinition Height="22"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Very Short Playtime: " />
-                    <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Settings.VeryShortPlaytimeName}"></TextBox>
-                    <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Short Playtime: " />
-                    <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Settings.ShortPlaytimeName}"></TextBox>
-                    <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="Medium Playtime: " />
-                    <TextBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Settings.MediumPlaytimeName}"></TextBox>
-                    <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="Long Playtime: " />
-                    <TextBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Settings.LongPlaytimeName}"></TextBox>
-                    <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="Very Long Playtime: " />
-                    <TextBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Settings.VeryLongPlaytimeName}"></TextBox>
-                    <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Text="Unknown Playtime: " />
-                    <TextBox Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Settings.UnknownPlaytimeName}"></TextBox>
+                    <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Ignore Name: " Margin="0, 0 , 5 , 0" />
+                    <CheckBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Settings.IgnoreName}" />
+                    <TextBlock Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Text="Ignore Genre: " Margin="0, 0 , 5 , 0" />
+                    <CheckBox Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" IsChecked="{Binding Settings.IgnoreGenre}" />
+                    <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Ignore Developers: " Margin="0, 0 , 5 , 0" />
+                    <CheckBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Settings.IgnoreDevelopers}" />
+                    <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Text="Ignore Publishers: " Margin="0, 0 , 5 , 0" />
+                    <CheckBox Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" IsChecked="{Binding Settings.IgnorePublishers}" />
+                    <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="Ignore Tags: " Margin="0, 0 , 5 , 0" />
+                    <CheckBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Settings.IgnoreTags}" />
+                    <TextBlock Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Text="Ignore Score: " Margin="0, 0 , 5 , 0" />
+                    <CheckBox Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" IsChecked="{Binding Settings.IgnoreScore}" />
+                    <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="Ignore Release Date: " Margin="0, 0 , 5 , 0" />
+                    <CheckBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Settings.IgnoreReleaseDate}" />
+                    <TextBlock Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" Text="Ignore Description: " Margin="0, 0 , 5 , 0" />
+                    <CheckBox Grid.Row="3" Grid.Column="3" VerticalAlignment="Center" IsChecked="{Binding Settings.IgnoreDescription}" />
+                    <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="Ignore Background: " Margin="0, 0 , 5 , 0" />
+                    <CheckBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Settings.IgnoreBackground}" />
+                    <TextBlock Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" Text="Ignore Cover: " Margin="0, 0 , 5 , 0" />
+                    <CheckBox Grid.Row="4" Grid.Column="3" VerticalAlignment="Center" IsChecked="{Binding Settings.IgnoreCover}" />
                 </Grid>
             </StackPanel>
         </StackPanel>
-        <Separator />
-        <StackPanel>
-            <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="Dates:" />
-            <StackPanel Orientation="Horizontal" Margin="10">
-                <TextBlock Text="Allow incomplete dates: " Margin="0, 0 , 5 , 0" />
-                <CheckBox IsChecked="{Binding Settings.AllowIncompleteDates}" />
-            </StackPanel>
-        </StackPanel>
-    </StackPanel>
+    </ScrollViewer>
 </UserControl>
