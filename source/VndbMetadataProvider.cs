@@ -117,51 +117,54 @@ namespace VndbMetadata
                 return new List<MetadataField>();
             }
 
-            var fields = new List<MetadataField>
+            var fields = new List<MetadataField> { MetadataField.Links };
+            if (!settings.IgnoreName)
             {
-                MetadataField.Name,
-                MetadataField.Genres,
-                MetadataField.Links
-            };
+                fields.Add(MetadataField.Name);
+            }
 
-            if (!string.IsNullOrEmpty(vnData.Description))
+            if (!settings.IgnoreGenre)
+            {
+                fields.Add(MetadataField.Genres);
+            }
+
+            if (!settings.IgnoreDescription && !string.IsNullOrEmpty(vnData.Description))
             {
                 fields.Add(MetadataField.Description);
             }
-                
 
-            if (vnData.Image != null && IsImageAllowed(vnData))
+            if (!settings.IgnoreCover && vnData.Image != null && IsImageAllowed(vnData))
             {
                 fields.Add(MetadataField.CoverImage);
             }
 
-            if (vnData.Screenshots.HasItems() &&
+            if (!settings.IgnoreBackground && vnData.Screenshots.HasItems() &&
                 vnData.Screenshots.Any(IsImageAllowed))
             {
                 fields.Add(MetadataField.BackgroundImage);
             }
 
-            if (vnData.Released != null && vnData.Released.Year != null)
+            if (!settings.IgnoreReleaseDate && vnData.Released != null && vnData.Released.Year != null)
             {
                 fields.Add(MetadataField.ReleaseDate);
             }
 
-            if (tagDetails != null && HasViableTags())
+            if (!settings.IgnoreTags && tagDetails != null && HasViableTags())
             {
                 fields.Add(MetadataField.Tags);
             }
 
-            if (vnData.Rating != 0)
+            if (!settings.IgnoreScore && vnData.Rating != 0)
             {
                 fields.Add(MetadataField.CommunityScore);
             }
 
-            if (vnProducers != null && vnProducers.Count(p => p.IsDeveloper) > 0)
+            if (!settings.IgnoreDevelopers && vnProducers != null && vnProducers.Count(p => p.IsDeveloper) > 0)
             {
                 fields.Add(MetadataField.Developers);
             }
 
-            if (vnProducers != null && vnProducers?.Count(p => p.IsPublisher) > 0)
+            if (!settings.IgnorePublishers && vnProducers != null && vnProducers?.Count(p => p.IsPublisher) > 0)
             {
                 fields.Add(MetadataField.Publishers);
             }
@@ -220,55 +223,58 @@ namespace VndbMetadata
 
         public override string GetName(GetMetadataFieldArgs args)
         {
-            if (AvailableFields.Contains(MetadataField.Name) && vnData != null)
+            if (settings.IgnoreName || !AvailableFields.Contains(MetadataField.Name) || vnData == null)
             {
-                return vnData.Name;
+                return base.GetName(args);
             }
-
-            return base.GetName(args);
+            
+            return vnData.Name;
         }
 
         public override IEnumerable<MetadataProperty> GetGenres(GetMetadataFieldArgs args)
         {
-            if (AvailableFields.Contains(MetadataField.Genres) && vnData != null)
+            if (settings.IgnoreGenre || !AvailableFields.Contains(MetadataField.Genres) || vnData == null)
             {
-                return new List<MetadataProperty>
-                {
-                    new MetadataNameProperty("Visual Novel")
-                };
+                return base.GetGenres(args);
             }
+            
+            return new List<MetadataProperty>
+            {
+                new MetadataNameProperty("Visual Novel")
+            };
 
-            return base.GetGenres(args);
         }
 
         public override ReleaseDate? GetReleaseDate(GetMetadataFieldArgs args)
         {
-            if (AvailableFields.Contains(MetadataField.ReleaseDate) && vnData != null)
+            if (settings.IgnoreReleaseDate || !AvailableFields.Contains(MetadataField.ReleaseDate) || vnData == null)
             {
-                if (vnData.Released.Year != null && vnData.Released.Month != null && vnData.Released.Day != null)
-                {
-                    return new ReleaseDate
-                    (
-                        (int)vnData.Released.Year.Value,
-                        vnData.Released.Month.Value,
-                        vnData.Released.Day.Value
-                    );
-                }
-                else if (vnData.Released.Year != null && vnData.Released.Month != null && settings.AllowIncompleteDates)
-                {
-                    return new ReleaseDate
-                    (
-                        (int)vnData.Released.Year.Value,
-                        vnData.Released.Month.Value
-                    );
-                }
-                else if (vnData.Released.Year != null && settings.AllowIncompleteDates)
-                {
-                    return new ReleaseDate
-                    (
-                        (int)vnData.Released.Year.Value
-                    );
-                }
+                return base.GetReleaseDate(args);
+            }
+            
+            if (vnData.Released.Year != null && vnData.Released.Month != null && vnData.Released.Day != null)
+            {
+                return new ReleaseDate
+                (
+                    (int)vnData.Released.Year.Value,
+                    vnData.Released.Month.Value,
+                    vnData.Released.Day.Value
+                );
+            }
+            else if (vnData.Released.Year != null && vnData.Released.Month != null && settings.AllowIncompleteDates)
+            {
+                return new ReleaseDate
+                (
+                    (int)vnData.Released.Year.Value,
+                    vnData.Released.Month.Value
+                );
+            }
+            else if (vnData.Released.Year != null && settings.AllowIncompleteDates)
+            {
+                return new ReleaseDate
+                (
+                    (int)vnData.Released.Year.Value
+                );
             }
 
             return base.GetReleaseDate(args);
@@ -276,31 +282,33 @@ namespace VndbMetadata
 
         public override IEnumerable<MetadataProperty> GetDevelopers(GetMetadataFieldArgs args)
         {
-            if (AvailableFields.Contains(MetadataField.Developers) && vnData != null)
+            if (settings.IgnoreDevelopers || !AvailableFields.Contains(MetadataField.Developers) || vnData == null)
             {
-                return vnProducers.Where(p => p.IsDeveloper)
-                    .Select(p => p.Name).Distinct()
-                    .Select(s => new MetadataNameProperty(s)).ToList();
+                return base.GetDevelopers(args);
             }
+            
+            return vnProducers.Where(p => p.IsDeveloper)
+                .Select(p => p.Name).Distinct()
+                .Select(s => new MetadataNameProperty(s)).ToList();
 
-            return base.GetDevelopers(args);
         }
 
         public override IEnumerable<MetadataProperty> GetPublishers(GetMetadataFieldArgs args)
         {
-            if (AvailableFields.Contains(MetadataField.Developers) && vnData != null)
+            if (settings.IgnorePublishers || !AvailableFields.Contains(MetadataField.Developers) || vnData == null)
             {
-                return vnProducers.Where(p => p.IsPublisher)
-                    .Select(p => p.Name).Distinct()
-                    .Select(s => new MetadataNameProperty(s)).ToList();
+                return base.GetDevelopers(args);
             }
+            
+            return vnProducers.Where(p => p.IsPublisher)
+                .Select(p => p.Name).Distinct()
+                .Select(s => new MetadataNameProperty(s)).ToList();
 
-            return base.GetDevelopers(args);
         }
 
         public override IEnumerable<MetadataProperty> GetTags(GetMetadataFieldArgs args)
         {
-            if (!AvailableFields.Contains(MetadataField.Tags) || vnData == null)
+            if (settings.IgnoreTags || !AvailableFields.Contains(MetadataField.Tags) || vnData == null)
             {
                 return base.GetTags(args);
             }
@@ -482,75 +490,71 @@ namespace VndbMetadata
 
         public override string GetDescription(GetMetadataFieldArgs args)
         {
-            if (AvailableFields.Contains(MetadataField.Description) && vnData != null)
+            if (settings.IgnoreDescription || !AvailableFields.Contains(MetadataField.Description) || vnData == null)
             {
-                return descriptionFormatter.Format(vnData.Description);
+                return base.GetDescription(args);
             }
-
-            return base.GetDescription(args);
+            
+            return descriptionFormatter.Format(vnData.Description);
         }
 
         public override int? GetCommunityScore(GetMetadataFieldArgs args)
         {
-            if (AvailableFields.Contains(MetadataField.CommunityScore) && vnData != null)
+            if (settings.IgnoreScore || !AvailableFields.Contains(MetadataField.CommunityScore) || vnData == null)
             {
-                return (int)(vnData.Rating * 10.0);
+                return base.GetCommunityScore(args);
             }
-
-            return base.GetCommunityScore(args);
+            
+            return (int)(vnData.Rating * 10.0);
         }
 
         public override MetadataFile GetCoverImage(GetMetadataFieldArgs args)
         {
-            if (AvailableFields.Contains(MetadataField.CoverImage) && vnData != null)
+            if (settings.IgnoreCover || !AvailableFields.Contains(MetadataField.CoverImage) || vnData == null)
             {
-                if (IsImageAllowed(vnData))
-                {
-                    return new MetadataFile(vnData.Image);
-                }
+                return base.GetCoverImage(args);
             }
-
-            return base.GetCoverImage(args);
+            
+            return IsImageAllowed(vnData) ? new MetadataFile(vnData.Image) : base.GetCoverImage(args);
         }
 
         public override MetadataFile GetBackgroundImage(GetMetadataFieldArgs args)
         {
-            if (AvailableFields.Contains(MetadataField.BackgroundImage) && vnData != null)
+            if (settings.IgnoreBackground || !AvailableFields.Contains(MetadataField.BackgroundImage) || vnData == null)
             {
-                var selection = vnData.Screenshots
-                    .Where(x => IsImageAllowed(x))
-                    .Select(x => new ImageFileOption(x.Url))
-                    .ToList();
-
-                var background = playniteApi.Dialogs.ChooseImageFile(selection, "Screenshots");
-                if (background != null)
-                {
-                    return new MetadataFile(background.Path);
-                }
+                return base.GetBackgroundImage(args);
             }
+            
+            var selection = vnData.Screenshots
+                .Where(x => IsImageAllowed(x))
+                .Select(x => new ImageFileOption(x.Url))
+                .ToList();
 
-            return base.GetBackgroundImage(args);
+            var background = playniteApi.Dialogs.ChooseImageFile(selection, "Screenshots");
+            
+            return background != null ? new MetadataFile(background.Path) : base.GetBackgroundImage(args);
         }
 
         public override IEnumerable<Link> GetLinks(GetMetadataFieldArgs args)
         {
-            if (AvailableFields.Contains(MetadataField.Links) && vnData != null)
+            if (!AvailableFields.Contains(MetadataField.Links) || vnData == null)
             {
-                var links = new List<Link> { new Link("VNDB", "https://vndb.org/v" + vnData.Id) };
-                if (!string.IsNullOrWhiteSpace(vnData.VisualNovelLinks.Renai))
-                {
-                    links.Add(new Link("Renai", "https://renai.us/game/" + vnData.VisualNovelLinks.Renai));
-                }
+                return base.GetLinks(args);
+            }
+            
+            var links = new List<Link> { new Link("VNDB", "https://vndb.org/v" + vnData.Id) };
+            if (!string.IsNullOrWhiteSpace(vnData.VisualNovelLinks.Renai))
+            {
+                links.Add(new Link("Renai", "https://renai.us/game/" + vnData.VisualNovelLinks.Renai));
+            }
                 
-                if (!string.IsNullOrWhiteSpace(vnData.VisualNovelLinks.Wikidata))
-                {
-                    links.Add(new Link("Wikidata", "https://www.wikidata.org/wiki/" + vnData.VisualNovelLinks.Wikidata));
-                }
-
-                return links;
+            if (!string.IsNullOrWhiteSpace(vnData.VisualNovelLinks.Wikidata))
+            {
+                links.Add(new Link("Wikidata", "https://www.wikidata.org/wiki/" + vnData.VisualNovelLinks.Wikidata));
             }
 
-            return base.GetLinks(args);
+            return links;
+
         }
     }
 }

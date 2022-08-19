@@ -41,6 +41,17 @@ namespace VndbMetadata
         
         public string UnknownPlaytimeName { get; set; } = "Unknown Length";
 
+        public bool IgnoreName { get; set; } = false;
+        public bool IgnoreGenre { get; set; } = false;
+        public bool IgnoreDevelopers { get; set; } = false;
+        public bool IgnorePublishers { get; set; } = false;
+        public bool IgnoreTags { get; set; } = false;
+        public bool IgnoreScore { get; set; } = false;
+        public bool IgnoreReleaseDate { get; set; } = false;
+        public bool IgnoreDescription { get; set; } = false;
+        public bool IgnoreBackground { get; set; } = false;
+        public bool IgnoreCover { get; set; } = false;
+        
             //Deprecated Configuration Values kept for configuration migration
 
         [ObsoleteAttribute("This property is obsolete. Use MaxContentTags and ImageMaxSexualityLevel instead.", false)]
