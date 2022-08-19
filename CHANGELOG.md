@@ -4,14 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0]
+## [2.1] - 2022-08-19
+I planned on releasing Bulk Metadata Import in 2.1, but decided to get some features out before, as the bulk import will still take awhile
+### Added
+- [Issue #22](https://github.com/Mithnar/PlayniteVndb/issues/22) Option to completely disable specific fields for metadata import
+- [Issue #24](https://github.com/Mithnar/PlayniteVndb/issues/24) Option to import estimated playtime as a tag
+
+## [2.0] - 2021-12-06
 Thank you [darklinkpower](https://github.com/darklinkpower) for working on the 2.0 Release
 ### Added
 - [Issue #18](https://github.com/Mithnar/PlayniteVndb/issues/18) Option to add a prefix to tags to order and identify them on import
 ### Fixed
 - [Issue #20](https://github.com/Mithnar/PlayniteVndb/issues/20) Extensions fails to load in the latest version of Playnite
 
-## [1.2]
+## [1.2] - 2020-10-31
 ### Added
 - [Issue #13](https://github.com/Mithnar/PlayniteVndb/issues/13) Enable searching for a vndb entry by id (syntax: id:v2002)
 - [Issue #16](https://github.com/Mithnar/PlayniteVndb/issues/16) Tag Dumps are now downloaded on start up if not present or outdated
@@ -66,7 +72,8 @@ Special Thanks to [darklinkpower](https://github.com/darklinkpower) for testing 
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/Mithnar/PlayniteVndb/compare/2.0...HEAD
+[Unreleased]: https://github.com/Mithnar/PlayniteVndb/compare/2.1...HEAD
+[2.1]: https://github.com/Mithnar/PlayniteVndb/compare/2.0...2.1
 [2.0]: https://github.com/Mithnar/PlayniteVndb/compare/1.2...2.0
 [1.2]: https://github.com/Mithnar/PlayniteVndb/compare/1.1.1...1.2
 [1.1.1]: https://github.com/Mithnar/PlayniteVndb/compare/1.1...1.1.1
