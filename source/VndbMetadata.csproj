@@ -73,6 +73,9 @@
     <None Include="extension.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+	<None Include="Localization\*.xaml">
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -81,6 +84,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="App.xaml" />
+    <Page Include="Localization\de_DE.xaml" />
+    <Page Include="Localization\en_US.xaml" />
     <Page Include="VndbMetadataSettingsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

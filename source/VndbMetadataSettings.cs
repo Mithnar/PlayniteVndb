@@ -101,6 +101,48 @@ namespace VndbMetadata
                 OnPropertyChanged();
             }
         }
+        
+        public Dictionary<ViolenceLevel, string> ViolenceLevelEnums { get; } =
+            new Dictionary<ViolenceLevel, string>()
+            {
+                { ViolenceLevel.Tame, ResourceProvider.GetString("LOCVndbMd_Settings_ViolenceLevel_" + ViolenceLevel.Tame) },
+                { ViolenceLevel.Violent, ResourceProvider.GetString("LOCVndbMd_Settings_ViolenceLevel_" + ViolenceLevel.Violent) },
+                { ViolenceLevel.Brutal, ResourceProvider.GetString("LOCVndbMd_Settings_ViolenceLevel_" + ViolenceLevel.Brutal) }
+            };
+
+        public ViolenceLevel ViolenceLevelProperty
+        {
+            get { return settings.ImageMaxViolenceLevel; }
+            set { settings.ImageMaxViolenceLevel = value; }
+        }
+        
+        public Dictionary<SexualityLevel, string> SexualLevelEnums { get; } =
+            new Dictionary<SexualityLevel, string>()
+            {
+                { SexualityLevel.Safe, ResourceProvider.GetString("LOCVndbMd_Settings_SexualLevel_" + SexualityLevel.Safe) },
+                { SexualityLevel.Suggestive, ResourceProvider.GetString("LOCVndbMd_Settings_SexualLevel_" + SexualityLevel.Suggestive) },
+                { SexualityLevel.Explicit, ResourceProvider.GetString("LOCVndbMd_Settings_SexualLevel_" + SexualityLevel.Explicit) }
+            };
+
+        public SexualityLevel SexualLevelProperty
+        {
+            get { return settings.ImageMaxSexualityLevel; }
+            set { settings.ImageMaxSexualityLevel = value; }
+        }
+        
+        public Dictionary<SpoilerLevel, string> SpoilerLevelEnums { get; } =
+            new Dictionary<SpoilerLevel, string>()
+            {
+                { SpoilerLevel.None, ResourceProvider.GetString("LOCVndbMd_Settings_SpoilerLevel_" + SpoilerLevel.None) },
+                { SpoilerLevel.Minor, ResourceProvider.GetString("LOCVndbMd_Settings_SpoilerLevel_" + SpoilerLevel.Minor) },
+                { SpoilerLevel.Major, ResourceProvider.GetString("LOCVndbMd_Settings_SpoilerLevel_" + SpoilerLevel.Major) }
+            };
+
+        public SpoilerLevel SpoilerLevelProperty
+        {
+            get { return settings.TagMaxSpoilerLevel; }
+            set { settings.TagMaxSpoilerLevel = value; }
+        }
 
         public VndbMetadataSettingsViewModel(VndbMetadata plugin)
         {
