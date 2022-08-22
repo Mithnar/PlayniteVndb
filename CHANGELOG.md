@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - [Issue #28](https://github.com/Mithnar/PlayniteVndb/issues/28) Add localization support
+- Translation: German
 
 ## [2.1] - 2022-08-19
 I planned on releasing Bulk Metadata Import in 2.1, but decided to get some features out before, as the bulk import will still take awhile
