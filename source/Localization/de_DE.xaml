@@ -5,19 +5,19 @@
     <sys:String x:Key="LOCVndbMd_Settings_Date_Header">Datum</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_Field_Header">Felder</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_ViolenceLevel_Label">Maximale Gewaltdarstellung</sys:String>
-    <sys:String x:Key="LOCVndbMd_Settings_SexualLevel_Label">Maximale Sexdarstellung</sys:String>
-    <sys:String x:Key="LOCVndbMd_Settings_MaxTags_Label">Max Tags</sys:String>
-    <sys:String x:Key="LOCVndbMd_Settings_MaxContentTags_Label">Max Inhalt-Tags</sys:String>
-    <sys:String x:Key="LOCVndbMd_Settings_MaxSexualTags_Label">Max Sexual-Tags</sys:String>
-    <sys:String x:Key="LOCVndbMd_Settings_MaxTechnicalTags_Label">Max Technik-Tags</sys:String>
+    <sys:String x:Key="LOCVndbMd_Settings_SexualLevel_Label">Maximale Sexualität</sys:String>
+    <sys:String x:Key="LOCVndbMd_Settings_MaxTags_Label">Max. Tags</sys:String>
+    <sys:String x:Key="LOCVndbMd_Settings_MaxContentTags_Label">Max. Inhaltliche Tags</sys:String>
+    <sys:String x:Key="LOCVndbMd_Settings_MaxSexualTags_Label">Max. Sexuelle Tags</sys:String>
+    <sys:String x:Key="LOCVndbMd_Settings_MaxTechnicalTags_Label">Max. Technische Tags</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_ContentPrefix_Label">Inhaltspräfix</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_SexualPrefix_Label">Sexualpräfix</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_TechnicalPrefix_Label">Technikpräfix</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_PrefixInfo_Text">Die entsprechenden Präfix-Felder leer lassen, um Präfixe für eine Kategorie zu deaktivieren</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_MinScore_Label">Minimalwertung</sys:String>
-    <sys:String x:Key="LOCVndbMd_Settings_SpoilerLevel_Label">Spoilerlevel</sys:String>
-    <sys:String x:Key="LOCVndbMd_Settings_LastUpdated_Text">Letzte Tag aktualisierung erfolgt am </sys:String>
-    <sys:String x:Key="LOCVndbMd_Settings_PlaytimeTag_Label">Spielzeittag erstellen</sys:String>
+    <sys:String x:Key="LOCVndbMd_Settings_SpoilerLevel_Label">Max. Spoiler Level</sys:String>
+    <sys:String x:Key="LOCVndbMd_Settings_LastUpdated_Text">Tags zuletzt aktualisiert am </sys:String>
+    <sys:String x:Key="LOCVndbMd_Settings_PlaytimeTag_Label">Spielzeit-Tag erstellen</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_PlaytimeTagVeryShort_Label">Sehr kurze Spielzeit</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_PlaytimeTagShort_Label">Kurze Spielzeit</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_PlaytimeTagMedium_Label">Mittlere Spielzeit</sys:String>
@@ -41,7 +41,7 @@
     <sys:String x:Key="LOCVndbMd_Settings_SexualLevel_Safe">Sicher</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_SexualLevel_Suggestive">Suggestiv</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_SexualLevel_Explicit">Explizit</sys:String>
-    <sys:String x:Key="LOCVndbMd_Settings_SpoilerLevel_None">Spoilerfrei</sys:String>
-    <sys:String x:Key="LOCVndbMd_Settings_SpoilerLevel_Minor">Kleine Spoiler</sys:String>
+    <sys:String x:Key="LOCVndbMd_Settings_SpoilerLevel_None">Keine Spoiler</sys:String>
+    <sys:String x:Key="LOCVndbMd_Settings_SpoilerLevel_Minor">Geringe Spoiler</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_SpoilerLevel_Major">Große Spoiler</sys:String>
 </ResourceDictionary>
