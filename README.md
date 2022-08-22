@@ -19,6 +19,9 @@ https://vndb.org/
 ![Game Selection](https://raw.githubusercontent.com/Mithnar/PlayniteVndb/readme/images/vndb_selection.png "game selection")
 ![Background Selection](https://raw.githubusercontent.com/Mithnar/PlayniteVndb/readme/images/vndb_images.png "background selection")
 
+## Translations
+You can help to translate PlayniteVndb into different languages via [the projects Crowdin page](https://crowdin.com/project/playnite-vndb-metadata).
+
 ## Release History
 For the detailed release history, head over to the [Changelog](https://github.com/Mithnar/PlayniteVndb/blob/master/CHANGELOG.md)
 
