@@ -6,8 +6,9 @@ VNDB is a comprehensive database for Visual Novels
 https://vndb.org/
 
 ## Installation
+Playnite VNDB can be directly installed via the Playnite addon browser or by visiting https://playnite.link/addons.html and clicking on download (Metadata Sources)
 
-### .pext
+### Manual installation (.pext file)
 - Download the pext extension: https://github.com/Mithnar/PlayniteVndb/releases
 - Drag and Drop the pext file onto your Playnite application
 - Accept the installion and restart Playnite
