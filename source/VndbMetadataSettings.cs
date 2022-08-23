@@ -51,6 +51,8 @@ namespace VndbMetadata
         public bool IgnoreDescription { get; set; } = false;
         public bool IgnoreBackground { get; set; } = false;
         public bool IgnoreCover { get; set; } = false;
+
+        public bool PreferLocalizedName { get; set; } = true;
         
             //Deprecated Configuration Values kept for configuration migration
 
