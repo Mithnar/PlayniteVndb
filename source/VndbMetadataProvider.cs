@@ -18,7 +18,7 @@ namespace VndbMetadata
 {
     public class VndbMetadataProvider : OnDemandMetadataProvider
     {
-        private static readonly ILogger logger = LogManager.GetLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger();
         private readonly MetadataRequestOptions options;
         private readonly List<TagName> tagDetails;
         private readonly IPlayniteAPI playniteApi;
@@ -73,9 +73,9 @@ namespace VndbMetadata
             VndbItemOption item = (VndbItemOption)playniteApi.Dialogs.ChooseItemWithSearch(null, searchString =>
             {
                 ReadOnlyCollection<VisualNovel> search;
-                if (isVndbId(searchString))
+                if (IsVndbId(searchString))
                 {
-                    search = vndbClient.GetVisualNovelAsync(VndbFilters.Id.Equals(retrieveVndbId(searchString)),
+                    search = vndbClient.GetVisualNovelAsync(VndbFilters.Id.Equals(RetrieveVndbId(searchString)),
                             VndbFlags.FullVisualNovel).Result
                             .Items;
                 }
@@ -88,9 +88,9 @@ namespace VndbMetadata
 
                 results = search;
                 return new List<GenericItemOption>(search.Select(vn =>
-                {
-                    return new VndbItemOption(vn.Name, descriptionFormatter.RemoveTags(vn.Description), vn.Id);
-                })
+                    {
+                        return new VndbItemOption(RetrieveOriginalOrLocalizedName(vn), descriptionFormatter.RemoveTags(vn.Description), vn.Id);
+                    })
                     .ToList());
             }, options.GameData.Name);
 
@@ -108,6 +108,17 @@ namespace VndbMetadata
 
             vnData = null;
             return false;
+        }
+
+        private string RetrieveOriginalOrLocalizedName(VisualNovel vn)
+        {
+            var name = vn.Name;
+            if (!settings.PreferLocalizedName && !string.IsNullOrEmpty(vn.OriginalName))
+            {
+                name = vn.OriginalName;
+            }
+
+            return name;
         }
 
         private List<MetadataField> GetAvailableFields()
@@ -210,13 +221,13 @@ namespace VndbMetadata
             return Math.Round(tag.Score, 1) >= settings.TagMinScore && LowerSpoilerLevel(tag);
         }
 
-        private bool isVndbId(string searchString)
+        private static bool IsVndbId(string searchString)
         {
             var onlyNumbersMatcher = new Regex("^[\\d]+$");
             return searchString.ToLower().StartsWith("id:v") && onlyNumbersMatcher.IsMatch(searchString.Substring(4));
         }
 
-        private uint retrieveVndbId(string searchString)
+        private uint RetrieveVndbId(string searchString)
         {
             return uint.Parse(searchString.Substring(4));
         }
@@ -227,8 +238,8 @@ namespace VndbMetadata
             {
                 return base.GetName(args);
             }
-            
-            return vnData.Name;
+
+            return RetrieveOriginalOrLocalizedName(vnData);
         }
 
         public override IEnumerable<MetadataProperty> GetGenres(GetMetadataFieldArgs args)
@@ -321,7 +332,7 @@ namespace VndbMetadata
             {
                 if (tagName == null)
                 {
-                    logger.Warn("VndbMetadataProvider: Could not find tag: " + tagMetadata.Id);
+                    Logger.Warn("VndbMetadataProvider: Could not find tag: " + tagMetadata.Id);
                 }
                 else if (TagIsAvailableForScoreAndSpoiler(tagMetadata) &&
                          TagIsInEnabledCategory(tagName) &&
@@ -420,33 +431,36 @@ namespace VndbMetadata
 
         private int AddTechnicalTagIfNotMax(int technicalTags, List<string> tags, TagName tagName)
         {
-            if (technicalTags < settings.MaxTechnicalTags)
+            if (technicalTags >= settings.MaxTechnicalTags)
             {
-                ++technicalTags;
-                tags.Add(string.Concat(settings.TechnicalTagPrefix, tagName.Name));
+                return technicalTags;
             }
+            ++technicalTags;
+            tags.Add(string.Concat(settings.TechnicalTagPrefix, tagName.Name));
 
             return technicalTags;
         }
 
         private int AddSexualTagIfNotMax(int sexualTags, List<string> tags, TagName tagName)
         {
-            if (sexualTags < settings.MaxSexualTags)
+            if (sexualTags >= settings.MaxSexualTags)
             {
-                ++sexualTags;
-                tags.Add(string.Concat(settings.SexualTagPrefix, tagName.Name));
+                return sexualTags;
             }
+            ++sexualTags;
+            tags.Add(string.Concat(settings.SexualTagPrefix, tagName.Name));
 
             return sexualTags;
         }
 
         private int AddContentTagIfNotMax(int contentTags, List<string> tags, TagName tagName)
         {
-            if (contentTags < settings.MaxContentTags)
+            if (contentTags >= settings.MaxContentTags)
             {
-                ++contentTags;
-                tags.Add(string.Concat(settings.ContentTagPrefix, tagName.Name));
+                return contentTags;
             }
+            ++contentTags;
+            tags.Add(string.Concat(settings.ContentTagPrefix, tagName.Name));
 
             return contentTags;
         }
@@ -543,6 +557,7 @@ namespace VndbMetadata
             }
             
             var links = new List<Link> { new Link("VNDB", "https://vndb.org/v" + vnData.Id) };
+            
             if (!string.IsNullOrWhiteSpace(vnData.VisualNovelLinks.Renai))
             {
                 links.Add(new Link("Renai", "https://renai.us/game/" + vnData.VisualNovelLinks.Renai));

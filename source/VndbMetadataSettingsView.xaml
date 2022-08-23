@@ -156,6 +156,10 @@
             <Separator />
             <StackPanel>
                 <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="{DynamicResource LOCVndbMd_Settings_Field_Header}" />
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <CheckBox Width="25" IsChecked="{Binding Settings.PreferLocalizedName}" />
+                    <TextBlock Text="{DynamicResource LOCVndbMd_Settings_PreferLocalized_Label}"/>
+                </StackPanel>
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="25"></ColumnDefinition>
