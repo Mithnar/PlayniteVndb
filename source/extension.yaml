@@ -1,7 +1,7 @@
 ﻿Id: VNDBMetadata
 Name: PlayniteVndb
 Author: Mithnar
-Version: 2.2
+Version: 2.2.2
 Module: VndbMetadata.dll
 Type: MetadataProvider
 Icon: icon.png
