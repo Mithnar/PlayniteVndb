@@ -5,9 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [2.2] - 2022-08-23
 ### Added
 - [Issue #28](https://github.com/Mithnar/PlayniteVndb/issues/28) Add localization support
-- Translation: German
+- [Issue #27](https://github.com/Mithnar/PlayniteVndb/issues/27) Option to select between localized and original game title
+- German Language Support
 
 ## [2.1] - 2022-08-19
 I planned on releasing Bulk Metadata Import in 2.1, but decided to get some features out before, as the bulk import will still take awhile
@@ -77,7 +79,8 @@ Special Thanks to [darklinkpower](https://github.com/darklinkpower) for testing 
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/Mithnar/PlayniteVndb/compare/2.1...HEAD
+[Unreleased]: https://github.com/Mithnar/PlayniteVndb/compare/2.2...HEAD
+[2.2]: https://github.com/Mithnar/PlayniteVndb/compare/2.1...2.2
 [2.1]: https://github.com/Mithnar/PlayniteVndb/compare/2.0...2.1
 [2.0]: https://github.com/Mithnar/PlayniteVndb/compare/1.2...2.0
 [1.2]: https://github.com/Mithnar/PlayniteVndb/compare/1.1.1...1.2

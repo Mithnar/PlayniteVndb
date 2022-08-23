@@ -1,10 +1,14 @@
 ﻿Id: VNDBMetadata
 Name: PlayniteVndb
 Author: Mithnar
-Version: 2.1
+Version: 2.2
 Module: VndbMetadata.dll
 Type: MetadataProvider
 Icon: icon.png
 Links:
     - Name: GitHub
       Url: https://github.com/Mithnar/PlayniteVndb
+    - Name: Translation
+      Url: https://crowdin.com/project/playnite-vndb-metadata 
+    - Name: Changelog
+      Url: https://github.com/Mithnar/PlayniteVndb/blob/master/CHANGELOG.md
