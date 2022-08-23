@@ -25,7 +25,7 @@
     <sys:String x:Key="LOCVndbMd_Settings_PlaytimeTagVeryLong_Label">Sehr lange Spielzeit</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_PlaytimeTagUnknown_Label">Unbekannte Spielzeit</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_IncompleteDate_Label">Unvollständiges Datum erlauben</sys:String>
-    <sys:String x:Key="LOCVndbMd_Settings_PreferLocalized_Label">Prefer localized VN name</sys:String>
+    <sys:String x:Key="LOCVndbMd_Settings_PreferLocalized_Label">Lokalisierten VN-Namen bevorzugen</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_IgnoreName_Label">Name ignorieren</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_IgnoreGenre_Label">Genre ignorieren</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_IgnoreDeveloper_Label">Entwickler ignorieren</sys:String>
