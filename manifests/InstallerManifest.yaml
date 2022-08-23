@@ -1,10 +1,11 @@
 AddonId: VNDBMetadata
 Packages:
-  - Version: 2.2.1
+  - Version: 2.2.2
     RequiredApiVersion: 6.1.0
     ReleaseDate: 2022-08-23
-    PackageUrl: https://github.com/Mithnar/PlayniteVndb/releases/download/2.1/PlayniteVndb_2_1.pext
+    PackageUrl: https://github.com/Mithnar/PlayniteVndb/releases/download/2.1/PlayniteVndb_2_2.pext
     Changelog:
       - Option to select between localized and original game title
       - Add localization support
       - German Language Support
+      - (This is 2.2, ignore 2.2.2 version showing)
