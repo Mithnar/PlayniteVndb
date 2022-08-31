@@ -1,8 +1,9 @@
 # Playnite VNDB Metadata Extension
-![VersionBadge](https://img.shields.io/github/v/release/Mithnar/PlayniteVndb)
-![ReleaseDateBadge](https://img.shields.io/github/release-date/Mithnar/PlayniteVndb)
-![DownloadsBadge](https://img.shields.io/github/downloads/Mithnar/PlayniteVndb/total)
-![LicenseBadge](https://img.shields.io/github/license/Mithnar/PlayniteVndb)
+[![VersionBadge](https://img.shields.io/github/v/release/Mithnar/PlayniteVndb)](https://github.com/Mithnar/PlayniteVndb/releases/tag/2.2.2)
+[![ReleaseDateBadge](https://img.shields.io/github/release-date/Mithnar/PlayniteVndb)](https://github.com/Mithnar/PlayniteVndb/releases/tag/2.2.2)
+[![LicenseBadge](https://img.shields.io/github/license/Mithnar/PlayniteVndb)](https://github.com/Mithnar/PlayniteVndb/blob/master/LICENSE)
+[![DownloadsBadge](https://img.shields.io/github/downloads/Mithnar/PlayniteVndb/total)](https://github.com/Mithnar/PlayniteVndb/releases)
+[![CrowdinBadge](https://badges.crowdin.net/playnite-vndb-metadata/localized.svg)](https://crowdin.com/project/playnite-vndb-metadata)
 > Enables VNDB as a Metadata source for Playnite
 
 VNDB is a comprehensive database for Visual Novels
