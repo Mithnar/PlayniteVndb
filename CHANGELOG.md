@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Arabic language support (Thanks to X4Lo)
 - French language support (Thanks to X4Lo)
+- Spanish language support (Thanks to darklinkpower)
 
 ## [2.2] - 2022-08-23
 ### Added
