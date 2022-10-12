@@ -12,7 +12,7 @@
     <sys:String x:Key="LOCVndbMd_Settings_MaxTechnicalTags_Label">最大技术标签数</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_ContentPrefix_Label">内容前缀</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_SexualPrefix_Label">色情前缀</sys:String>
-    <sys:String x:Key="LOCVndbMd_Settings_TechnicalPrefix_Label">技术前缀：</sys:String>
+    <sys:String x:Key="LOCVndbMd_Settings_TechnicalPrefix_Label">技术前缀</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_PrefixInfo_Text">保留文本框为空以禁用类别前缀</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_MinScore_Label">最小分数</sys:String>
     <sys:String x:Key="LOCVndbMd_Settings_SpoilerLevel_Label">剧透级别</sys:String>
